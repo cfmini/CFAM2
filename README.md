@@ -13,6 +13,3 @@ php需要7.4.3
 需要开启php扩展
 php_pdo_sqlite
 php_pdo_sqlsrv
-
-安装教程
-https://www.imaoe.com/bbs-post/2223.html/
