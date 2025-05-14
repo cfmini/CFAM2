@@ -1,2 +1,7 @@
 # CFAM2
 
+CFAM网站数据库账号密码在.env 修改
+
+CF服务端网站数据库账号密码在 config/database.php 文件修改
+
+域名/admin
