@@ -1,0 +1,148 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>举报申诉 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <script src="/static/js/jquery.min.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+
+<body>
+<!-- Navbar -->
+{include file="/common/header" /}
+
+<main>
+    <div class="pattern-square"></div>
+    <!--Pageheader start-->
+    <section class="py-5 py-lg-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-1 col-md-12 col-12">
+                    <h1 class="mb-3">温馨提示</h1>
+                    <p class="mb-0 lead">乱提交者后台会自动封号，封号不给予解封。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--All events start-->
+    <section class="mb-xl-9 my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
+                    <div class="row g-xl-7 gy-5">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <form class="row g-3 needs-validation" id="PostReport" novalidate="">
+                                    <div class="col-md-12">
+                                        <select class="form-select" id="report">
+                                            <option selected="" disabled="" value="">请选择类型</option>
+                                            <option value="1">举报用户</option>
+                                            <option value="2">申诉账号</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-12" id="reportedNicknameContainer" style="display: none;">
+                                        <label for="reportedNickname" class="form-label">
+                                            被举报人昵称
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" name="reportedNickname" id="reportedNickname" required="">
+                                    </div>
+
+                                    <div class="col-md-12" id="appealAccountContainer" style="display: none;">
+                                        <label for="appealAccount" class="form-label">
+                                            要申诉的账号
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" name="appealAccount" id="appealAccount" value="{:session('USER_LOGIN_ID')}" disabled>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="title" class="form-label">标题</label>
+                                        <input type="text" class="form-control" name="title" id="title" required="">
+                                        <div class="invalid-feedback">请填写标题</div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="contactTextarea" class="form-label">内容</label>
+                                        <textarea class="form-control" id="contactTextarea" placeholder="内容务必填写详细" rows="4" required=""></textarea>
+                                        <div class="invalid-feedback">务必填写内容</div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" id="submit" type="submit">确定</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="my-lg-9 my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 col-md-12">
+                    <div class="text-center mb-xl-7 mb-5 mx-xl-8">
+                        <h2 class="mb-0">已被封禁的账号</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-5">
+                {foreach $list as $v}
+                <div class="col-lg-3 col-md-6">
+                    <div class="card text-center card-lift">
+                        <div class="card-body py-5">
+                            <h5 class="mb-1"><!--<span><img src="https://q2.qlogo.cn/headimg_dl?dst_uin=1372691250@qq.com&amp;spec=100" alt="logo" class="icon-xs" style="border-radius: 100%;"></span>--><span class="ms-1 d-none d-lg-inline-flex">test111</span></h5>
+                            <small>{$v.content|strip_tags}</small>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </section>
+    <!--Webinar end-->
+</main>
+<!-- Footer -->
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/index.js"></script>
+<!-- Theme JS -->
+<script type="text/javascript" src="/static/admin/assets/libs/tinymce/tinymce.min.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script>
+    tinymce.init({
+        selector: '#contactTextarea',
+        height: 525,
+        branding: false,
+        language: 'zh_CN',
+        menubar:'',
+        plugins: 'image autolink link media wordcount',
+        toolbar: 'image link media forecolor wordcount',
+        toolbar_drawer: '',
+        images_upload_url: '/UserPost/uploadImage',
+        file_picker_types: 'media',
+        elementpath: false,
+        file_picker_callback: function (callback, value, meta) {
+            console.log('还没写呢');
+        },
+        init_instance_callback: function (editor) {
+            console.log(editor);
+        },
+    });
+</script>
+</body>
+</html>

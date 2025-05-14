@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="CFer代理系统">
+    <meta name="description" content="CFer代理系统">
+    <meta name="author" content="会飞的鱼">
+    <title>代理登录 - CFer代理系统</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/style.min.css">
+    <style>
+        .login-form .has-feedback {
+            position: relative;
+        }
+
+        .login-form .has-feedback .form-control {
+            padding-left: 36px;
+        }
+
+        .login-form .has-feedback .mdi {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: auto;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            z-index: 4;
+            color: #dcdcdc;
+            display: block;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .login-form .has-feedback.row .mdi {
+            left: 15px;
+        }
+    </style>
+</head>
+
+<body class="center-vh" style="background-image: url(images/login-bg-2.jpg); background-size: cover;">
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="card card-shadowed p-5 w-420 mb-0 mr-2 ml-2">
+    <div class="text-center mb-3">
+        <a href="index.html"> <img alt="light year admin" src="/static/agency/images/logo-sidebar.png"> </a>
+    </div>
+
+    <form action="#!" method="post" class="login-form">
+        <div class="form-group has-feedback">
+            <span class="mdi mdi-account" aria-hidden="true"></span>
+            <input type="text" class="form-control" id="username" placeholder="用户名">
+        </div>
+
+        <div class="form-group has-feedback">
+            <span class="mdi mdi-lock" aria-hidden="true"></span>
+            <input type="password" class="form-control" id="password" placeholder="密码">
+        </div>
+
+        <div class="form-group has-feedback row">
+            <div class="col-7">
+                <span class="mdi mdi-check-all form-control-feedback" aria-hidden="true"></span>
+                <input type="text" id="AgenCaptcha" class="form-control" placeholder="验证码">
+            </div>
+            <div class="col-5 text-right">
+                <img src="/index/AgenCaptcha" class="pull-right" id="captcha" style="cursor: pointer;" onclick="loadimg();"
+                     title="点击刷新" alt="captcha">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="rememberme">
+                <label class="custom-control-label not-user-select" for="rememberme">7天内自动登入</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-block btn-primary" type="button" onclick="perform();">立即登入</button>
+        </div>
+    </form>
+
+    <p class="text-center text-muted mb-0">Copyright © 2024 <a href="https://houz.cn/">会飞的鱼</a>. All right
+        reserved</p>
+</div>
+
+<script type="text/javascript" src="/static/agency/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/main.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/lyear-loading.js"></script>
+
+<script type="text/javascript">
+    //刷新验证码
+    loadimg();
+
+    function perform() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var code = $("#AgenCaptcha").val();
+        if (username == '') {
+            notify('请输入用户账号！', 'warning');
+            return;
+        } else if (password == '') {
+            notify('请输入用户密码！', 'warning');
+            return;
+        } else if (code == '') {
+            notify('请输入验证码！', 'warning');
+            return;
+        }
+        var l = $('body')
+            .lyearloading({
+                opacity: 0.2,
+                spinnerSize: 'lg',
+                spinnerText: '正在登入中...',
+            });
+        $.ajax({
+            url: '/PostAgency/login', //后台请求地址
+            type: 'post', //请求方式
+            secureuri: false, //是否启用安全提交
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                "username": username,
+                "password": password,
+                "AgenCaptcha": code,
+            }, // 附加参数
+            dataType: 'json', //服务器返回的数据类型。
+            success: function (json, status) {
+                l.destroy();
+                if (json.code == 200) {
+                    notify(json.msg, 'success');
+                    setTimeout(function () {
+                        var url = getQueryString("jump");
+                        if (!url) {
+                            var url = "/Agency";
+                        } else {
+                            var url = decodeURIComponent(url);
+                        }
+                        console.log(url);
+                        window.location.href = url;
+                    }, 3000);
+                } else {
+                    $("#code").val('');
+                    loadimg();
+                    notify(json.msg, 'warning');
+                }
+            },
+            error: function (json, status, e) {
+                notify(e, 'danger');
+                l.destroy();
+            }
+
+        });
+    }
+
+    if (getQueryString("msg")) {
+        notify(getQueryString("msg"), 'warning');
+    }
+
+    function loadimg() {
+        var img = document.getElementById("captcha");
+        img.setAttribute('src', '/index/AgenCaptcha?r=' + Math.random());
+    }
+
+    function getQueryString(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return decodeURI(pair[1]); // 解密方法
+            }
+        }
+        return false;
+    }
+
+    function notify(msg, type = 'success') {
+        $.notify({
+                // options
+                icon: 'mdi mdi-alert',
+                message: msg
+            },
+            {
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                // settings
+                type: type
+            });
+    }
+
+</script>
+</body>
+</html>

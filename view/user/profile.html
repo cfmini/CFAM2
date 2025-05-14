@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>资料修改 - {$configs.info}</title>
+  <meta name="keywords" content="{$configs.keywords}"/>
+  <meta name="description" content="{$configs.description}"/>
+  <meta name="author" content="会飞的鱼"/>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <link rel="shortcut icon" href="./assets/images/favicon/favicon.ico" />
+  <script src="/static/js/color-modes.js"></script>
+  <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+  <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/scrollCue.css" />
+  <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+  <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+<body>
+{include file="/common/header" /}
+<main>
+  <!--Account home start-->
+  <section class="py-lg-7 py-5 bg-light-subtle">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-4">
+          {include file="/user/nav" /}
+        </div>
+        <div class="col-lg-9 col-md-8">
+          <div class="mb-4">
+            <h1 class="mb-0 h3">修改密码</h1>
+          </div>
+          <div class="card border-0 mb-4 shadow-sm">
+            <div class="card-body p-lg-5">
+              <div class="mb-5">
+                <h4 class="mb-1">修改邮箱</h4>
+                <p class="mb-0 fs-6">
+                  {if $userinfo.email == null}
+                  <a href="#" id="AddEmail" class="text-primary">当前未绑定邮箱,点我绑定</a>
+                  {else}
+                  您当前的邮箱 <a href="#" class="text-primary">{$userinfo.email}</a>
+                  {/if}
+                </p>
+              </div>
+              <form class="row needs-validation" id="EmailPost" novalidate="">
+                <div class="col-lg-7">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">更换新的邮箱</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="blocktheme@example.cpm" required="">
+                    <div class="invalid-feedback">请输入正确的邮箱</div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-primary">修改邮箱</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card border-0 mb-4 shadow-sm">
+            <div class="card-body p-lg-5">
+              <div class="mb-5">
+                <h4 class="mb-1">重置密码</h4>
+                <p class="mb-0 fs-6">重置密码需要填写原来正确的密码，否则无法重置密码</p>
+              </div>
+              <form class="row gy-3 needs-validation" id="PostPass" novalidate="">
+                <div class="col-lg-7">
+                  <label for="OldPassword" class="form-label">旧密码</label>
+                  <input type="password" class="form-control" name="OldPassword" id="OldPassword" required="">
+                  <div class="invalid-feedback">请输入旧密码</div>
+                </div>
+
+                <div class="col-lg-7">
+                  <label for="NewPassword" class="form-label">新密码</label>
+                  <input type="password" class="form-control" name="NewPassword" id="NewPassword" required="">
+                  <div class="invalid-feedback">请输入新的密码</div>
+                  <div class="form-text">密码长度必须大于等于6位小于等于18位！！！</div>
+                </div>
+
+                <div class="col-lg-7">
+                  <label for="ConfirmPassword" class="form-label">确认新密码</label>
+                  <input type="password" class="form-control" name="ConfirmPassword" id="ConfirmPassword" required="">
+                  <div class="invalid-feedback">请输入新的密码</div>
+                  <div class="form-text">确保与上面新密码一致</div>
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-primary me-2" type="submit">重置密码</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Account home end-->
+</main>
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/user.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+</body>
+</html>

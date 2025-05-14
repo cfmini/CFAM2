@@ -1,0 +1,70 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Cdk兑换 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="shortcut icon" href="./assets/images/favicon/favicon.ico" />
+    <script src="/static/js/color-modes.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+<body>
+{include file="/common/header" /}
+<main>
+    <!--Account home start-->
+    <section class="py-lg-7 py-5 bg-light-subtle">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    {include file="/user/nav" /}
+                </div>
+                <div class="col-lg-9 col-md-8">
+                    <div class="mb-4">
+                        <h1 class="mb-0 h3">Cdk兑换</h1>
+                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-5">
+                                <p class="mb-0 fs-6">
+                                    Cdk只有管理员发送，且一个Cdk只能兑换一次，切勿详细他人售卖任何Cdk，否则被骗请勿找我。
+                                </p>
+                            </div>
+                            <form class="row needs-validation" id="CdkPost" novalidate="">
+                                <div class="col-lg-7">
+                                    <div class="mb-3">
+                                        <label for="cdk" class="form-label">Cdk：</label>
+                                        <input type="text" class="form-control" name="cdk" id="cdk" required="">
+                                        <div class="invalid-feedback">请输入正确的Cdk</div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">兑换Cdk</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Account home end-->
+</main>
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/user.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+</body>
+</html>

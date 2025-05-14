@@ -1,0 +1,90 @@
+<div class="layui-side">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="_all">
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-home"></i>&emsp;<cite>主页</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/home">控制面板</a></dd>
+                    {if $user.rank == 1}
+                    <dd><a lay-href="/admin/update">在线更新</a></dd>
+                    {/if}
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-friends"></i>&emsp;<cite>用户系统</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/user">用户管理</a></dd>
+                    <dd><a lay-href="/admin/userLog">注册记录</a></dd>
+                    <dd><a lay-href="/admin/InviteLog">邀请记录</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a lay-href="/admin/itemAll"><i class="layui-icon layui-icon-star-fill"></i>&emsp;<cite>物品大全</cite></a>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-cart-simple"></i>&emsp;<cite>商城系统</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/shop">商城管理</a></dd>
+                    <dd><a lay-href="/admin/shopLog">购买记录</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-senior"></i>&emsp;<cite>Cdk管理</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/CdkList">Cdk列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-website"></i>&emsp;<cite>文章系统</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/news">文章管理</a></dd>
+                    <dd><a lay-href="/admin/addNews">添加文章</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-gift"></i>&emsp;<cite>活动系统</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/events">活动管理</a></dd>
+                    <dd><a lay-href="/admin/addEvents">添加活动</a></dd>
+                    <dd><a lay-href="/admin/EventsLog">领取记录</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-template-1"></i>&emsp;<cite>举报申诉</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/report">意见管理</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-release"></i>&emsp;<cite>注册管理</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/Invitation">邀请码</a></dd>
+                    <dd><a lay-href="/admin/agencyCode">代理邀请码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-component"></i>&emsp;<cite>Api接口</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/loginapi">登录验证</a></dd>
+                    <dd><a lay-href="/admin/regapi">注册接口</a></dd>
+                    <dd><a lay-href="/admin/cdkapi">CDK接口</a></dd>
+                    <dd><a lay-href="/admin/jieapi">解封接口</a></dd>
+                    <dd><a lay-href="/admin/itemapi">物品发送</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a><i class="layui-icon layui-icon-set"></i>&emsp;<cite>系统管理</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/admin/web">网站设置</a></dd>
+                    {if $user.rank == 1}
+                    <dd><a lay-href="/admin/AdminUser">后台用户</a></dd>
+                    <dd><a lay-href="/admin/agencyUser">代理用户</a></dd>
+                    <dd><a lay-href="/admin/online">在线用户</a></dd>
+                    <dd><a lay-href="/admin/userItem">物品权限</a></dd>
+                    {/if}
+                    <dd><a lay-href="/admin/record">操作日志</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-5">
+                                <h4 class="mb-1">最近战局</h4>
+                                <p class="fs-6 mb-0">这里显示默认最新10条战局信息</p>
+                            </div>
+                            <!-- Hoverable rows -->
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">战况</th>
+                                    <th scope="col">游戏时长</th>
+                                    <th scope="col">人头</th>
+                                    <th scope="col">死亡</th>
+                                    <th scope="col">获得GP点</th>
+                                    <th scope="col">结束时间</th>
+                                    <th scope="col">状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="play_log" id="item"}
+                                <tr>
+                                    <th scope="row">{$i}</th>
+                                    <td>{if $item.WIN == 0}<span class="badge rounded-pill text-bg-danger">失败</span>{else} <span class="badge rounded-pill text-bg-success">胜利</span>{/if}</td>
+                                    <td>{if $item.PLAY_TIME < 60}
+                                        {$item.PLAY_TIME} 秒
+                                        {else}
+                                        {$minutes = intval($item.PLAY_TIME / 60)} 分 {if $item.PLAY_TIME % 60 > 0}{$seconds = $item.PLAY_TIME % 60} 秒{/if}
+                                        {/if}</td>
+                                    <td><span class="badge rounded-pill text-bg-secondary">{$item.KILL} 个</span></td>
+                                    <td><span class="badge rounded-pill text-bg-secondary">{$item.DEATH} 次</span></td>
+                                    <td><span class="badge rounded-pill text-bg-light">{$item.GAME_POINT}</span></td>
+                                    <td><span class="badge rounded-pill text-bg-info">{:date('Y-m-d H:i', strtotime($item.REG_DATE))}</span></td>
+                                    <td>{if $item.ESCAPE ==0 }<span class="badge rounded-pill text-bg-primary">正常</span>{else}<span class="badge rounded-pill text-bg-warning">逃跑</span>{/if}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+
+                            <div class="mt-4">
+                                <a href="#" class="icon-link icon-link-hover">
+                                    更多战局信息
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>

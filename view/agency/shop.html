@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="代理后台">
+    <meta name="description" content="代理后台">
+    <meta name="author" content="会飞的鱼">
+    <title>代理商城</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/jquery-confirm/jquery-confirm.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/style.min.css">
+</head>
+
+<body>
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        {include file="agency/side" /}
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+            {include file="agency/navbar" /}
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid p-t-15">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-shadowed">
+                            <div class="card-body">
+                                <div id="toolbar" class="btn-group">
+                                    <button class="btn btn-primary m-r-5" onclick="showCdkModal()"><i class="mdi mdi-plus"></i> 生成CDK</button>
+                                </div>
+                                <table id="tb_departments"></table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="exampleModalChangeTitle">发送物品</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="user" class="col-form-label">用户名:</label>
+                                    <input type="text" class="form-control" id="user">
+                                </div>
+                            </form>
+                            <div id="notifications"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="saveButton">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="CdkModal" tabindex="-1" role="dialog" aria-labelledby="CdkModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="CdkTitle">生成Cdk</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="ids" class="col-form-label">物品ID:</label>
+                                    <input type="text" class="form-control" id="ids" placeholder="多个物品请用,隔开，例如1,2,3">
+                                </div>
+                                <div class="form-group">
+                                    <label for="num" class="col-form-label">生成数量:</label>
+                                    <input type="number"  class="form-control" id="num" placeholder="最少1最大20">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="CdkButton">生成</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<script type="text/javascript" src="/static/agency/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/popper.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/main.min.js"></script>
+<script type="text/javascript">
+    $('#exampleModalChange').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var recipient = button.data('whatever');
+        var modal = $(this);
+        modal.find('.modal-title').text('New message to ' + recipient);
+        modal.find('.modal-body input').val(recipient);
+    })
+</script>
+<script type="text/javascript">
+    $('#tb_departments').bootstrapTable({
+        classes: 'table table-bordered table-hover table-striped',
+        url: '/Agency/get_list_shop',
+        method: 'post',
+        //dataType : 'jsonp',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+        uniqueId: 'id',
+        idField: 'id',             // 每行的唯一标识字段
+        toolbar: '#toolbar',       // 工具按钮容器
+        //clickToSelect: true,     // 是否启用点击选中行
+        showColumns: true,         // 是否显示所有的列
+        showRefresh: true,         // 是否显示刷新按钮
+
+        showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+
+        pagination: true,                    // 是否显示分页
+        sortOrder: "asc",                    // 排序方式
+        queryParams: function (params) {
+            var temp = {
+                limit: params.limit,         // 每页数据量
+                offset: params.offset,       // sql语句起始索引
+                page: (params.offset / params.limit) + 1,
+                sort: params.sort,           // 排序的列名
+                sortOrder: params.order      // 排序方式'asc' 'desc'
+            };
+            return temp;
+        },                                   // 传递参数
+        sidePagination: "client",            // 分页方式：client客户端分页，server服务端分页
+        pageNumber: 1,                       // 初始化加载第一页，默认第一页
+        pageSize: 10,                        // 每页的记录行数
+        pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+        //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+
+        //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+        //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            sortable: true    // 是否排序
+        }, {
+            field: 'title',
+            title: '物品名称'
+        }, {
+            field: 'img',
+            title: '物品图片',
+            formatter: function (value, row, index) {
+                return '<img src="' + value + '" style="width:30px; height:30px;">';
+            }
+        }, {
+            field: 'money',
+            title: '支付余额'
+        }, {
+            field: 'create_time',
+            title: '创建时间'
+        }, {
+            field: 'operate',
+            title: '执行操作',
+            width: 120,
+            formatter: btnGroup,
+        }],
+        onLoadSuccess: function (data) {
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    });
+
+    function btnGroup(value, row, index) {
+        return '<button class="btn btn-xs btn-primary" onclick="showModal(\'' + row.id + '\')">发送物品</button>';
+    }
+
+    function showModal(id) {
+        $('#myModal').modal('show');
+        selectedId = id;
+
+    }
+    function showCdkModal() {
+        $('#CdkModal').modal('show');
+
+    }
+    $(document).ready(function() {
+        $('#saveButton').click(function() {
+            var user = $('#user').val();
+            if (!user) {
+                notify('用户不能为空', 'warning');
+                return;
+            }
+            $.ajax({
+                url: '/PostAgency/BuyItem',
+                type: 'POST',
+                data: {
+                    id: selectedId,
+                    user: user
+                },
+                success: function(response) {
+                    if (response.code == 200){
+                        notify(response.msg, 'success');
+                    } else{
+                        notify(response.msg, 'warning');
+                    }
+                    $('#myModal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    console.error('服务器错误：', error);
+                }
+            });
+        });
+
+        $('#CdkButton').click(function() {
+            var ids = $('#ids').val();
+            var num = $('#num').val();
+            if (!ids || !num) {
+                notify('所有内容不能为空', 'warning');
+                return;
+            }
+            $.ajax({
+                url: '/PostAgency/generateCdk',
+                type: 'POST',
+                data: {
+                    ids: ids,
+                    num: num
+                },
+                success: function(response) {
+                    if (response.code == 200){
+                        notify(response.msg, 'success');
+                        $('#CdkModal').modal('hide');
+                    } else{
+                        notify(response.msg, 'warning');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('服务器错误：', error);
+                }
+            });
+        });
+    });
+
+    function notify(msg, type = 'success') {
+        $.notify({
+
+                icon: 'mdi mdi-alert',
+                message: msg
+            },
+            {
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                type: type,
+                z_index: 1050,
+                element: 'body',
+            });
+
+    }
+</script>
+</body>
+</html>

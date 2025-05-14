@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>提交申诉</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+    <![endif]-->
+    <style>
+        /** 查看详情弹窗样式 */
+        .paper-info-group {
+            padding: 15px 25px;
+        }
+
+        .paper-info-group h3 {
+            font-weight: bold;
+            color: #000000;
+            padding-bottom: 8px;
+        }
+
+        .paper-info-group p {
+            color: #666;
+            padding-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .paper-info-group .paper-info-group-imgs {
+            padding-top: 5px;
+        }
+
+        .paper-info-group .paper-info-group-imgs img {
+            margin-right: 15px;
+            margin-bottom: 15px;
+            cursor: zoom-in;
+        }
+
+        .paper-info-group .paper-info-group-imgs img:last-child {
+            margin-right: 0;
+            height: 290px;
+        }
+
+        /* 日期组件不显示秒 */
+        .laydate-time-list li:last-child {
+            display: none;
+        }
+
+        .laydate-time-list li {
+            width: 50% !important;
+        }
+
+        .laydate-time-list ol li {
+            padding-left: 55px !important;
+            width: 100% !important;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">意见管理</div>
+        <div class="layui-card-body">
+            <table id="reportTable" lay-filter="reportTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="reportTbBar">
+    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="view">查看</a>
+    {{# if (d.status == '0') { }}
+    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="examine">审核</a>
+    {{# } }}
+</script>
+<!-- 查看详情弹窗 -->
+<script type="text/html" id="reportInfoDialog">
+    <div class="paper-info-group">
+        {{d.content}}
+    </div>
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="reportTbState">
+    {{# if(d.status==0){ }}
+    <span style="color: orange;cursor: default;" lay-tips="正在审核中，请耐心等待">待审核</span>
+    {{# }else if(d.status==1){ }}
+    <span class="icon-text" style="color: green;cursor: pointer;" lay-event="checkList">
+        已审核<i class="layui-icon layui-icon-tips"></i>
+    </span>
+    {{# } }}
+</script>
+
+<!-- 审核记录 -->
+<script id="reportCheckDialog" type="text/html">
+    <div style="padding: 25px 0 0 30px;">
+        <ul class="layui-timeline">
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <div class="layui-timeline-title">
+                        <h3 class="inline-block">用户：{{d.appealAccount}}</h3>&emsp;{{d.create_time}}
+                    </div>
+                    <p>提交了意见申请</p>
+                </div>
+            </li>
+            {{# if(d.aid !== 0){ }}
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <div class="layui-timeline-title">
+                        <h3 class="inline-block">管理员：{{d.aid}}</h3>&emsp;{{d.update_time}}
+                    </div>
+                    <p>审核结果：{{d.result}}</p>
+                </div>
+            </li>
+            {{# } else { }}
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <div class="layui-timeline-title">
+                        还没有管理审核
+                    </div>
+                </div>
+            </li>
+            {{# } }}
+        </ul>
+    </div>
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['layer', 'admin', 'form', 'table', 'laytpl', 'util', 'laydate', 'cascader', 'tagsInput'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var form = layui.form;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+        var cascader = layui.cascader;
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#reportTable',
+            url: '/AdminAjax/ReportList',
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {field: 'appealAccount', sort: true, title: '提交用户'},
+                {field: 'reportType', title: '类型', align:"center",templet:function(d){
+                        if (d.reportType == 1){
+                            return '举报用户：'+d.reportedNickname;
+                        } else if (d.reportType == 2) {
+                            return '申诉账号：'+d.appealAccount;
+                        }
+                    }},
+                {toolbar: '#reportTbState', sort: true, title: '状态'},
+                {align: 'center', toolbar: '#reportTbBar', title: '操作', minWidth: 180}
+            ]],
+            size: 'lg'
+        });
+
+        // 工具条点击事件
+        table.on('tool(reportTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'comments') {  // 查看评论
+                showComments(data.id);
+            } else if (layEvent == 'view') {
+                showInfo(data);
+            } else if (layEvent == 'checkList') {
+                openCheckList(data);
+            } else if (layEvent == 'examine'){
+                examineT([data.id]);
+            }
+        });
+
+        function examineT(ids) {
+            layer.confirm('确定审核该意见？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/examinePost', {
+                    id: ids.join("."),
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        // 查看详情
+        function showInfo(data) {
+            laytpl(reportInfoDialog.innerHTML).render(data, function (html) {
+                // 创建临时元素并设置其HTML
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+
+                // 查询所有的 img 标签
+                var imgs = tempDiv.querySelectorAll('img');
+
+                // 遍历每个 img 标签并为其创建包裹 div
+                imgs.forEach(function (img) {
+                    var wrapperDiv = document.createElement('div');
+                    wrapperDiv.className = 'paper-info-group-imgs'; // 设置类名
+
+                    // 将 img 从其父元素中移除并放入 wrapperDiv 中
+                    img.parentNode.replaceChild(wrapperDiv, img);
+                    wrapperDiv.appendChild(img);
+                });
+
+                // 获取修改后的 HTML
+                var modifiedHtml = tempDiv.innerHTML;
+
+                // 打开弹窗并设置内容
+                admin.open({
+                    type: 1,
+                    title: '查看详情',
+                    area: '550px',
+                    content: modifiedHtml,
+                    success: function () {
+                        console.log(1);
+
+                        // 初始化图片查看器，使用类名选择器
+                        layer.photos({
+                            photos: '.paper-info-group-imgs img', // 使用类名选择器选择所有图片
+                            shade: 0.1,
+                            closeBtn: true
+                        });
+                    }
+                });
+            });
+        }
+        // 审核记录弹窗
+        function openCheckList(d) {
+            laytpl(reportCheckDialog.innerHTML).render(d, function (html) {
+                admin.open({
+                    type: 1,
+                    title: '审核详情',
+                    content: html
+                });
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

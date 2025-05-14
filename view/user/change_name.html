@@ -1,0 +1,97 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>昵称修改 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="shortcut icon" href="./assets/images/favicon/favicon.ico" />
+    <script src="/static/js/color-modes.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+<body>
+{include file="/common/header" /}
+<main>
+    <!--Account home start-->
+    <section class="py-lg-7 py-5 bg-light-subtle">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    {include file="/user/nav" /}
+                </div>
+                <div class="col-lg-9 col-md-8">
+                    <div class="mb-4">
+                        <h1 class="mb-0 h3">昵称修改</h1>
+                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-5">
+                                <p class="mb-0 fs-6">免费修改昵称，每次需{$configs.cknamemoney}GP，仅支持中文名且只能3-5个中文</p>
+                                <hr>
+                                <p class="fs-6 mb-0">当前昵称：{$nick}</p>
+                            </div>
+                            <form class="row needs-validation" id="CkNamePost" novalidate="">
+                                <div class="col-lg-7">
+                                    <div class="mb-3">
+                                        <label for="ckname" class="form-label">更改昵称</label>
+                                        <input type="text" class="form-control" name="ckname" id="ckname" placeholder="我是你爸爸" required="">
+                                        <div class="invalid-feedback">仅支持中文名且不能少于3个中文</div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">修改昵称</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-5">
+                                <p class="mb-0 fs-6">付费修改昵称，支持中文名且只能1-6个中文</p>
+                                <hr>
+                                <p class="fs-6 mb-0">当前昵称：{$nick}</p>
+                            </div>
+                            <form class="row needs-validation" id="NamePost" novalidate="">
+                                <div class="col-lg-7">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">改名卡CDK</label>
+                                        <input type="text" class="form-control" name="cdk" id="cdk" placeholder="请输入改名卡CDK" required="">
+                                        <div class="invalid-feedback">请输入改名卡CDK</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">更改昵称</label>
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="我是你爸爸" required="">
+                                        <div class="invalid-feedback">仅支持中文名且不能少于1-6个中文</div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">修改昵称</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Account home end-->
+</main>
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/user.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+</body>
+</html>

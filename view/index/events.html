@@ -1,0 +1,96 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>活动中心 - {$configs.info}</title>
+  <meta name="keywords" content="{$configs.keywords}"/>
+  <meta name="description" content="{$configs.description}"/>
+  <meta name="author" content="会飞的鱼"/>
+  <link rel="shortcut icon" href="/static/images/favicon.ico" />
+  <script src="/static/js/color-modes.js"></script>
+  <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+  <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/scrollCue.css" />
+  <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+  <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+
+<body>
+<!-- Navbar -->
+{include file="/common/header" /}
+
+<main>
+  <div class="pattern-square"></div>
+  <!--Pageheader start-->
+  <section class="py-5 py-lg-8">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3 col-12">
+          <div class="text-center">
+            <h1 class="mb-3">活动中心</h1>
+            <p class="mb-0">这里会更新本服所有的游戏活动</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--All events start-->
+  <section class="mb-xl-9 my-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-lg-12">
+          <div class="mb-4">
+            <h3 class="mb-4">All</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-5">
+        {foreach $list as $v}
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100 border-0 card-lift overflow-hidden">
+            <div class="row h-100 g-0">
+              <a href="/Activity/{$v.id}.html" class="col-lg-5 col-md-12" style="
+                                 background-image: url({$v.img});
+                                 background-size: cover;
+                                 background-repeat: no-repeat;
+                                 background-position: center;
+                                 min-height: 13rem;
+                              "></a>
+              <div class="col-lg-7 col-md-12">
+                <div class="card-body h-100 d-flex align-items-start flex-column border rounded-end-lg-3 rounded-bottom-3 rounded-top-0 rounded-start-lg-0 border-start-lg-0 border-top-0 border-top-lg">
+                  <div class="mb-5">
+                    <small class="text-uppercase fw-semibold ls-md">发布时间：{$v.create_time}</small>
+                    <h4 class="my-2"><a href="/Activity/{$v.id}.html" class="text-reset">{$v.title}</a></h4>
+                    <small>时间：{:date('Y年m月d', $v.start_time)} - {:date('Y年m月d', $v.end_time)}</small>
+                  </div>
+                  <div class="mt-auto">
+                    <small class="me-2">{$v.status|raw}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/foreach}
+        <div class="d-flex justify-content-center align-items-center flex-column">
+          {$list|raw}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Webinar end-->
+</main>
+<!-- Footer -->
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+
+<!-- Theme JS -->
+<script src="/static/js/theme.min.js"></script>
+</body>
+</html>

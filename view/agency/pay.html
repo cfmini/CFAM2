@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="代理后台">
+    <meta name="description" content="代理后台">
+    <meta name="author" content="会飞的鱼">
+    <title>代理后台</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/style.min.css">
+</head>
+
+<body>
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        {include file="agency/side" /}
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+            {include file="agency/navbar" /}
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid p-t-15">
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="card card-shadowed">
+                            <div class="callout callout-success">充值说明</div>
+                            <div class="card-body">
+                                <p>1.充值到账后不接受任何理由退款！</p>
+                                <p>2.如果支付成功后没有到账，请及时联系客服！</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <form class="row">
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">充值账号</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="{$userinfo.user}" readonly="">
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">账号余额</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="{$userinfo.money}" readonly="">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">元</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">充值金额</span>
+                                        </div>
+                                        <input type="text" id="money" class="form-control" value="1">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">元</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label for="seo_keywords">支付方式</label>
+                                        <select class="form-control" id="type">
+                                            <option value="alipay">支付宝</option>
+                                            <option value="wxpay">微信支付</option>
+                                            <option value="qqpay">QQ支付</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <center>
+                                            <button type="button" class="btn btn-primary ajax-post"
+                                                    target-form="add-form" onclick="perform();">充 值
+                                            </button>
+                                        </center>
+                                    </div>
+                                </form>
+                                <p id="token"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/agency/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/popper.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/main.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/lyear-loading.js"></script>
+<script type="text/javascript">
+    function perform() {
+        var money = $("#money").val();
+        var type = $("#type").val();
+        if (money == '') {
+            notify('请输入充值金额！', 'warning');
+            return;
+        } else if (type == '') {
+            notify('请输入支付方式！', 'warning');
+            return;
+        }
+        var l = $('body')
+            .lyearloading({
+                opacity: 0.2,
+                spinnerSize: 'lg',
+                spinnerText: '正在发起支付...',
+            });
+        $.ajax({
+            url: '/PostAgency/pay', //后台请求地址
+            type: 'post', //请求方式
+            secureuri: false, //是否启用安全提交
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                "money": money,
+                "type": type,
+            }, // 附加参数
+            dataType: 'json', //服务器返回的数据类型。
+            success: function (json, status) {
+                l.destroy();
+                if (json.code == 200) {
+                    window.location.href=json.url;
+                } else {
+                    notify(json.msg, 'warning');
+                }
+            },
+            error: function (json, status, e) {
+                notify(e, 'danger');
+                l.destroy();
+            }
+
+        });
+
+    }
+
+    function notify(msg, type = 'success') {
+        $.notify({
+                // options
+                icon: 'mdi mdi-alert',
+                message: msg
+            },
+            {
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                // settings
+                type: type
+            });
+    }
+</script>
+
+</body>
+</html>

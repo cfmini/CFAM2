@@ -1,0 +1,102 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>邀请记录 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="shortcut icon" href="./assets/images/favicon/favicon.ico" />
+    <script src="/static/js/color-modes.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+<body>
+{include file="/common/header" /}
+<main>
+    <!--Account home start-->
+    <section class="py-lg-7 py-5 bg-light-subtle">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4">
+                    {include file="/user/nav" /}
+                </div>
+                <div class="col-lg-9 col-md-8">
+                    <div class="mb-4">
+                        <h1 class="mb-0 h3">邀请记录</h1>
+                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-6 d-lg-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">统计</h4>
+                            </div>
+                            <div class="row gx-4">
+                                <div class="col-lg-6">
+                                    <div class="card border-0 mb-4 mb-lg-0 bg-light-subtle">
+                                        <div class="card-body py-lg-3 px-lg-4">
+                                            <div class="mb-5">
+                                                <h6>累计邀请人数</h6>
+                                                <h4>{$NumInv} 人</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card border-0 mb-4 mb-lg-0 bg-light-subtle">
+                                        <div class="card-body py-lg-3 px-lg-4">
+                                            <div class="mb-5">
+                                                <h6>累计获得CF点</h6>
+                                                <h4>{$cfNum} 点</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-0 mb-4 shadow-sm">
+                        <div class="card-body p-lg-5">
+                            <div class="mb-5">
+                                <p class="fs-6 mb-0">凡是邀请注册成功的人奖励被邀请人 {$configs.aValue} CF点。</p>
+                            </div>
+                            <ul class="list-group list-group-flush mb-0">
+                                {volist name="inv" id="v"}
+                                <li class="list-group-item px-0 py-3 border-top">
+                                    <div class="d-flex justify-content-between text-dark fw-semibold fs-6">
+                                        <span>成功邀请：{$v.buserid}</span>
+                                        <a href="javascript:;">奖励：{$v.cf} 点</a>
+                                        <span>时间：{$v.create_time}</span>
+                                    </div>
+                                </li>
+                                {/volist}
+                            </ul>
+
+                            <div class="mt-4">
+                                <a href="#" class="icon-link icon-link-hover">
+                                    下一页
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Account home end-->
+</main>
+{include file="/common/footer" /}
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/user.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+</body>
+</html>

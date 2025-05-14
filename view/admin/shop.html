@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>商品管理</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+    <style>
+        #shopTable + .layui-table-view .layui-table-body tbody > tr > td {
+            padding: 0;
+        }
+
+        #shopTable + .layui-table-view .layui-table-body tbody > tr > td > .layui-table-cell {
+            height: 48px;
+            line-height: 48px;
+        }
+
+        .tb-img-circle {
+            width: 40px;
+            height: 40px;
+            cursor: zoom-in;
+            border-radius: 50%;
+            border: 2px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 表格工具栏 -->
+            <form class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商品名:</label>
+                        <div class="layui-input-inline">
+                            <input name="Name" class="layui-input" placeholder="输入商品名"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">&emsp;
+                        <button class="layui-btn icon-btn" lay-filter="shopSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- 数据表格 -->
+            <table id="shopTable" lay-filter="shopTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="shopTbBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 表格状态列 -->
+<script type="text/html" id="shopTbState">
+    <input type="checkbox" lay-filter="shopTbStateCk" value="{{d.id}}" lay-skin="switch"
+           lay-text="上架|下架" {{d.status==1?'checked':''}}
+           {{d.HOLD_TYPE==2?'disabled':''}} style="display: none;"/>
+    <p style="display: none;">{{d.status==1?'上架':'下架'}}</p>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="shopEditDialog">
+    <form id="shopEditForm" lay-filter="shopEditForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">商品标题:</label>
+            <div class="layui-input-block">
+                <input name="title" placeholder="请输入商品标题" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">物品ID:</label>
+            <div class="layui-input-block">
+                <input name="itemid" placeholder="请输入物品ID" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">商品图片:</label>
+            <div class="layui-input-block">
+                <input name="img" placeholder="请输入商品图片" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">货币类型:</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="1" title="CF点" checked/>
+                <input type="radio" name="type" value="2" title="GP点"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">商品价格:</label>
+            <div class="layui-input-block">
+                <input name="money" placeholder="请输入商品价格" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn" lay-filter="shopEditSubmit" lay-submit>保存</button>
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        </div>
+    </form>
+</script>
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'zTree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        /* 渲染表格 */
+        var insTb = table.render({
+            elem: '#shopTable',
+            url: '/AdminAjax/ShopList',
+            page: true,
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn">添加商品</button>&nbsp;',
+                '<button lay-event="delAll" class="layui-btn layui-btn-sm layui-btn-danger icon-btn">删除选中</button>',
+                '</p>'].join(''),
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID',width: 50},
+                {
+                    title: '图片', templet: function (d) {
+                        var url = d.img || '/static/images/null.jpg';
+                        return '<img data-index="' + (d.LAY_INDEX - 1) + '" src="' + url + '" class="tb-img-circle" tb-img alt=""/>';
+                    }, align: 'center', width: 90, unresize: true
+                },
+                {field: 'title', title: '标题', align: 'center'},
+                {field: 'itemid', title: '物品ID', width: 150,align: 'center', sort: true},
+                {field: 'money', title: '价格', align: 'center', sort: true},
+                {field: 'type', title: '类型',templet:function(d){
+                        if (d.type == 1){
+                            return 'CF点'
+                        } else{
+                            return 'GP点'
+                        }
+                    }},
+                {field: 'create_time', title: '创建时间', align: 'center', sort: true},
+                {field: 'status', title: '状态', templet: '#shopTbState', sort: true, width: 100},
+                {title: '操作', toolbar: '#shopTbBar', align: 'center', width: 200, minWidth: 200}
+            ]]
+        });
+        $(document).off('click.tbImg').on('click.tbImg', '[tb-img]', function () {
+            var imgList = table.cache['shopTable'].map(function (d) {
+
+                return {
+                    alt: d.title,
+                    src: d.img || '/static/images/null.jpg'
+                }
+            });
+            layer.photos({photos: {data: imgList, start: $(this).data('index')}, shade: .1, closeBtn: true});
+        });
+        form.on('switch(shopTbStateCk)', function (obj) {
+            var loadIndex = layer.load(2);
+            $.post('/AdminAjax/shopStatus', {
+                Id: obj.elem.value,
+                state: obj.elem.checked ? 1 : 2
+            }, function (res) {
+                layer.close(loadIndex);
+                if (res.code === 200) {
+                    layer.msg(res.msg, {icon: 1});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'json');
+        });
+        /* 表格搜索 */
+        form.on('submit(shopSearch)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+            return false;
+        });
+
+        /* 表格工具条点击事件 */
+        table.on('tool(shopTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { // 修改
+                showEditModel(obj.data);
+            } else if (obj.event === 'del') { // 删除
+                doDel([data.id]);
+            }
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(shopTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                showEditModel();
+            } else if (obj.event === 'delAll') { // 删除
+                var checkRows = table.checkStatus('shopTable');
+                if (checkRows.data.length === 0) {
+                    layer.msg('请选择要删除的数据', {icon: 2});
+                    return;
+                }
+                var ids = checkRows.data.map(function (d) {
+                    return d.id;
+                });
+                console.log(ids)
+                doDelAll({ids: ids});
+            }
+        });
+
+        /* 显示表单弹窗 */
+        function showEditModel(mData) {
+            admin.open({
+                type: 1,
+                title: (mData ? '修改' : '添加') + '商品',
+                content: $('#shopEditDialog').html(),
+                success: function (layero, dIndex) {
+                    // 回显表单数据
+                    form.val('shopEditForm', mData);
+                    // 表单提交事件
+                    form.on('submit(shopEditSubmit)', function (data) {
+                        var loadIndex = layer.load(2);
+                        $.post(mData ? '/AdminAjax/EditShop' : '/AdminAjax/AddShop', data.field, function (res) {
+                            layer.close(loadIndex);
+                            if (200 === res.code) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {icon: 1});
+                                insTb.reload({page: {curr: 1}});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }, 'json');
+                        return false;
+                    });
+                }
+            });
+        }
+
+        /* 删除 */
+        function doDel(ids) {
+            layer.confirm('确定删除该商品？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/DelShop', {
+                    id: ids.join("."),
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+        function doDelAll(obj) {
+            layer.confirm('确定删除选中商品？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/DelShopAll', {
+                    ids: obj.ids ? obj.ids.join(',') : ''
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+    });
+</script>
+</body>
+</html>

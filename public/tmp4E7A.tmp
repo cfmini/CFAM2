@@ -1,0 +1,15 @@
+# pro 1.4
+CREATE TABLE `{db_prefix}cdks` ( `id` INT NOT NULL AUTO_INCREMENT , `item` LONGTEXT NOT NULL , `status` INT NOT NULL , `type` INT NOT NULL , `create_time` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;
+ALTER TABLE `{db_prefix}cdks` ADD `code` VARCHAR(255) NOT NULL AFTER `id`;
+ALTER TABLE `{db_prefix}cdks` ADD `name` VARCHAR(255) NOT NULL AFTER `id`;
+INSERT INTO `{db_prefix}configs` (`id`, `value`) VALUES ('token', ''), ('url', '');
+
+# pro 1.5
+ALTER TABLE `{db_prefix}admin_log` ADD `ip` VARCHAR(50) NOT NULL AFTER `content`;
+ALTER TABLE `{db_prefix}report` ADD `rusn` INT NOT NULL AFTER `usn`;
+
+# pro 1.6
+INSERT INTO `{db_prefix}configs` (`id`, `value`) VALUES ('regapi', '1');
+INSERT INTO `{db_prefix}configs` (`id`, `value`) VALUES ('cdkapi', '1');
+INSERT INTO `{db_prefix}configs` (`id`, `value`) VALUES ('loginapi', '1');
+INSERT INTO `{db_prefix}configs` (`id`, `value`) VALUES ('jieapi', '1');

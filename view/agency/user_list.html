@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="代理后台">
+    <meta name="description" content="代理后台">
+    <meta name="author" content="会飞的鱼">
+    <title>用户管理</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/jquery-confirm/jquery-confirm.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/style.min.css">
+</head>
+
+<body>
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        {include file="agency/side" /}
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+            {include file="agency/navbar" /}
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid p-t-15">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-shadowed">
+                            <div class="card-body">
+                                <div id="toolbar" class="btn-group">
+                                    <button class="btn btn-primary m-r-5" onclick="showModal()"><i class="mdi mdi-plus"></i> 新增</button>
+                                    <button id="submitCheckedRows" class="btn btn-info m-r-5">转移用户</button>
+                                </div>
+                                <table id="tb_departments"></table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="exampleModalChangeTitle">添加用户</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="user" class="col-form-label">用户名:</label>
+                                    <input type="text" class="form-control" id="user">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="col-form-label">邮箱:</label>
+                                    <input type="text" class="form-control" id="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pass" class="col-form-label">密码:</label>
+                                    <input type="text" class="form-control" id="pass">
+                                </div>
+                            </form>
+                            <div id="notifications"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="saveButton">添加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 添加一个用于显示输入框的模态对话框 -->
+            <div class="modal fade" id="nicknameModal" tabindex="-1" role="dialog" aria-labelledby="nicknameModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="nicknameModalLabel">修改昵称</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control" id="newNickname" placeholder="请输入新的昵称">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="saveNickname">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用于修改等级的模态框 -->
+            <div class="modal fade" id="levelModal" tabindex="-1" role="dialog" aria-labelledby="levelModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="levelModalLabel">修改等级</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="currentLevel">当前等级</label>
+                                <input type="text" class="form-control" id="currentLevel" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="newLevel">新等级</label>
+                                <input type="text" class="form-control" id="newLevel">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="saveLevel">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="welcomeModalLabel">欢迎</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>提示：转移成功后将无法在恢复转移，谨慎操作。</p>
+                            <div class="form-group">
+                                <label for="userInfoInput">代理账号：</label>
+                                <input type="text" class="form-control" id="userInfoInput" placeholder="请输入代理账号...">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="submitUserInfo">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/agency/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/popper.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/main.min.js"></script>
+<script type="text/javascript">
+    $('#tb_departments').bootstrapTable({
+        classes: 'table table-bordered table-hover table-striped',
+        url: '/Agency/get_list_user',
+        method: 'post',
+        //dataType : 'jsonp',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+        uniqueId: 'id',
+        idField: 'id',             // 每行的唯一标识字段
+        toolbar: '#toolbar',       // 工具按钮容器
+        //clickToSelect: true,     // 是否启用点击选中行
+        showColumns: true,         // 是否显示所有的列
+        showRefresh: true,         // 是否显示刷新按钮
+
+        showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+
+        pagination: true,                    // 是否显示分页
+        sortOrder: "asc",                    // 排序方式
+        queryParams: function(params) {
+            var temp = {
+                limit: params.limit,         // 每页数据量
+                offset: params.offset,       // sql语句起始索引
+                page: (params.offset / params.limit) + 1,
+                sort: params.sort,           // 排序的列名
+                sortOrder: params.order      // 排序方式'asc' 'desc'
+            };
+            return temp;
+        },                                   // 传递参数
+        sidePagination: "client",            // 分页方式：client客户端分页，server服务端分页
+        pageNumber: 1,                       // 初始化加载第一页，默认第一页
+        pageSize: 10,                        // 每页的记录行数
+        pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+        search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+        columns: [{
+            field: 'example',
+            checkbox: true    // 是否显示复选框
+        }, {
+            field: 'id',
+            title: 'ID',
+            sortable: true    // 是否排序
+        }, {
+            field: 'usn',
+            title: '账号标识'
+        }, {
+            field: 'user',
+            title: '注册账号'
+        }, {
+            field: 'nick',
+            title: '角色名'
+        }, {
+            field: 'lev',
+            title: '等级'
+        }, {
+            field: 'email',
+            title: '注册邮箱'
+        }, {
+            field: 'status',
+            title: '状态',
+            formatter:function(value, row, index){
+                var value="";
+                if (row.status == 'A') {
+                    value = '<span class="badge badge-success">正常</span>';
+                } else if(row.status == 'E') {
+                    value = '<span class="badge badge-danger">封号</span>';
+                }else {
+                    value = '<span class="badge badge-warning">未知</span>';
+                }
+                return value;
+            }
+        }, {
+            field: 'create_time',
+            title: '创建时间'
+        }, {
+            field: 'operate',
+            title: '操作',
+            formatter: btnGroup,
+            events: {
+                'click .edit-btn': function (event, value, row, index) {
+                    editNick(row);
+                },
+                'click .del-btn': function (event, value, row, index) {
+                    editLev(row);
+                }
+            }
+        }],
+        onLoadSuccess: function(data){
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    });
+    function btnGroup ()
+    {
+        let html =
+            '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="改名" data-toggle="tooltip" onclick="editNick()">改名</a>' +
+            '<a href="#!" class="btn btn-xs btn-default del-btn" title="修改等级" data-toggle="tooltip">修改等级</a>';
+        return html;
+    }
+
+    function editNick(row) {
+        $('#nicknameModal').data('usn', row.usn);
+        $('#nicknameModal').modal('show');
+    }
+
+    $('#welcomeModal').modal({
+        show: false
+    });
+
+    $('#submitCheckedRows').click(function() {
+        var checkedRows = $('#tb_departments').bootstrapTable('getSelections');
+        if (checkedRows.length === 0){
+            notify('请选勾选要操作的数据', 'warning');
+            return
+        }
+        $('#welcomeModal').modal('show');
+    });
+
+    function editLev(row) {
+        $('#currentLevel').val(row.lev);
+        $('#newLevel').val('');
+        $('#levelModal').data('rowData', row);
+        $('#levelModal').modal('show');
+    }
+
+    function showModal() {
+        $('#myModal').modal('show');
+
+    }
+    $(document).ready(function() {
+
+        $('#saveButton').click(function() {
+            var user = $('#user').val();
+            var email = $('#email').val();
+            var pass = $('#pass').val();
+            if (!user || !pass || !email) {
+                notify('所有输入框都不能为空', 'warning');
+                return;
+            }
+            $.ajax({
+                url: '/PostAgency/AddPostUser',
+                type: 'POST',
+                data: {
+                    email: email,
+                    user: user,
+                    pass:pass
+                },
+                success: function(response) {
+                    if (response.code == 200){
+                        notify(response.msg, 'success');
+                    } else{
+                        notify(response.msg, 'warning');
+                    }
+                    $('#myModal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    console.error('服务器错误：', error);
+                }
+            });
+        });
+        $('#saveNickname').click(function() {
+            var newNickname = $('#newNickname').val();
+            var usn = $('#nicknameModal').data('usn');
+
+            if (newNickname) {
+                $.ajax({
+                    url: '/PostAgency/newNickname',
+                    type: 'POST',
+                    data: {
+                        newNickname: newNickname,
+                        usn:usn
+                    },
+                    success: function(response) {
+                        if (response.code == 200){
+                            notify(response.msg, 'success');
+                            $('#nicknameModal').modal('hide');
+                            var pageNumber = $("#tb_departments").bootstrapTable("getOptions").pageNumber;
+                            $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:pageNumber});
+                        } else{
+                            notify(response.msg, 'warning');
+                        }
+                    },
+                    error: function() {
+                        notify('服务器异常', 'warning');
+                    }
+                });
+            } else {
+                alert('请输入新的昵称');
+            }
+        });
+
+        $('#saveLevel').click(function() {
+            var newLevel = $('#newLevel').val();
+            var rowData = $('#levelModal').data('rowData');
+
+            if (newLevel) {
+                $.ajax({
+                    url: '/PostAgency/saveLevel',
+                    type: 'POST',
+                    data: {
+                        newLevel: newLevel,
+                        userId: rowData.usn
+                    },
+                    success: function(response) {
+                        if (response.code == 200){
+                            notify(response.msg, 'success');
+                            $('#levelModal').modal('hide');
+                            var pageNumber = $("#tb_departments").bootstrapTable("getOptions").pageNumber;
+                            $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:pageNumber});
+                        } else{
+                            notify(response.msg, 'warning');
+                        }
+                    },
+                    error: function() {
+                        notify('服务器异常', 'warning');
+                    }
+                });
+            } else {
+                notify('请输入等级', 'warning');
+            }
+        });
+
+        $('#submitUserInfo').click(function() {
+            var checkedRows = $('#tb_departments').bootstrapTable('getSelections');
+            var userInfo = $('#userInfoInput').val();
+            var ids = checkedRows.map(function(row) {
+                return row.id;
+            });
+
+            // 发送 AJAX 请求
+            $.ajax({
+                url: '/PostAgency/TransferUser',
+                type: 'POST',
+                data: {
+                    ids: ids,
+                    userInfo:userInfo
+                },
+                success: function(response) {
+                    if (response.code == 200){
+                        notify(response.msg, 'success');
+                        $('#welcomeModal').modal('hide');
+                        var pageNumber = $("#tb_departments").bootstrapTable("getOptions").pageNumber;
+                        $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:pageNumber});
+                    } else{
+                        notify(response.msg, 'warning');
+                    }
+                },
+                error: function() {
+                    notify('服务器异常', 'warning');
+                }
+            });
+        });
+    });
+    function notify(msg, type = 'success') {
+        $.notify({
+
+                icon: 'mdi mdi-alert',
+                message: msg
+            },
+            {
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                type: type,
+                z_index: 1050,
+                element: 'body',
+            });
+
+    }
+</script>
+</body>
+</html>

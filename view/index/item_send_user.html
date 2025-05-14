@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>物品发送 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入 Bootstrap-Table 样式文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.css">
+    <!-- 引入 jQuery 库 -->
+    <script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 引入 Bootstrap-Table 插件 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+
+</head>
+<body>
+
+<div class="container">
+    <h2>物品后台</h2>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">条件查询</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="display:inline-block;">
+                            <div style="float:left;padding:6px;">
+                                <span>搜索：</span>
+                            </div>
+                            <div style="float:left;">
+                                <input id="searchText" class="form-control" style="width:200px;" placeholder="请输入要搜索的内容" />
+                            </div>
+                            <div style="float:left;padding:6px;">
+                                <span>类型：</span>
+                            </div>
+                            <div style="float:left;">
+                                <select id="sort" class="form-control" style="width:200px;">
+                                    <option value="">请选择</option>
+                                    <option value="ITEM_ID">ITEM_ID</option>
+                                    <option value="ITEM_CODE">ITEM_CODE</option>
+                                    <option value="NAME">NAME</option>
+                                </select>
+                            </div>
+                            <div style="float:left;margin-left:20px;">
+                                <button id="query" class="btn btn-primary">查询</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="apiHospitalList"></table>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $("#apiHospitalList").bootstrapTable({
+            url: "/post/SendItemListUser",   // 请求地址
+            method: 'post',                      // 请求方式（*）
+            striped: true,                      // 是否显示行间隔色
+            cache: false,                       // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   // 是否显示分页（*）
+            sortable: false,                     // 是否启用排序
+            sortOrder: "asc",                   // 排序方式
+            showRefresh: false,
+            sidePagination: "server",           // 分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                       // 初始化加载第一页，默认第一页
+            pageSize: 20,                       // 每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        // 可供选择的每页的行数（*）
+            search: false,                       // 启用搜索
+            //strictSearch: true,                 // 启用全匹配搜索
+            paginationFirstText: "首页",
+            paginationPreText: "上一页",
+            paginationNextText: "下一页",
+            paginationLastText: "末页",
+            formatLoadingMessage: function () {
+                return `<div class="alert alert-info">数据正在拼命加载中···</div>`;
+            },
+            queryParamsType: "",
+            responseHandler: responseHandler,
+            queryParams: function (params) {
+                return {
+                    pageSize: params.pageSize,                     // 每页记录条数
+                    pageNumber: params.pageNumber,                 // 当前页索引
+                    searchText: $('#searchText').val(),                        // 姓名
+                    sort: $('#sort').val()                     // 性别
+                };
+            },
+            columns: [
+                {field: 'ITEM_ID', title: 'ITEM_ID'},
+                {field: 'ITEM_CODE', title: 'ITEM_CODE'},
+                {field: 'NAME', title: 'NAME'},
+                {
+                    field: 'Controls',
+                    title: '操作',
+                    formatter: function (value, row) {
+                        return '<div class="btn-group btn-group-xs" ><button class="btn btn-default " onclick="handleClick(\'' + row.ITEM_ID + '\')">发送</button></div>';
+                    }
+                },
+            ]
+
+        })
+
+        $('#query').click(function () {
+            $('#apiHospitalList').bootstrapTable('refresh', { pageNumber: 1 });
+        });
+        function handleClick(id) {
+            layer.confirm('确定要发送物品到仓库？', {icon: 3, title:'确认'}, function(index){
+                layer.close(index);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.ajax({
+                    url: "/Post/PostSendItemUser",
+                    type: "POST",
+                    data: { id: id },
+                    success: function(data) {
+                        if (data.code === 200) {
+                            layer.msg(data.msg, { icon: 1 });
+                        } else {
+                            layer.msg(data.msg, { icon: 2 });
+                        }
+
+                        layer.close(load_show);
+                    },
+                    error: function(xhr, status, error) {
+                        layer.close(load_show);
+                    }
+                });
+            });
+        }
+        function responseHandler(result) {
+            if (result.code != 1) {
+                layer.msg(result.msg)
+                return false;
+            }
+            return {
+                total: result.total,
+                rows: result.data
+            };
+        }
+    </script>
+</div>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+</body>
+</html>

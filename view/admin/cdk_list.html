@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Cdk管理</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+    <style>
+        #shopTable + .layui-table-view .layui-table-body tbody > tr > td {
+            padding: 0;
+        }
+
+        #shopTable + .layui-table-view .layui-table-body tbody > tr > td > .layui-table-cell {
+            height: 48px;
+            line-height: 48px;
+        }
+
+        .tb-img-circle {
+            width: 40px;
+            height: 40px;
+            cursor: zoom-in;
+            border-radius: 50%;
+            border: 2px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">关键词:</label>
+                        <div class="layui-input-inline">
+                            <input name="key" class="layui-input" placeholder="输入关键词"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">&emsp;
+                        <button class="layui-btn icon-btn" lay-filter="cdkTbSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- 数据表格 -->
+            <table id="cdkTable" lay-filter="cdkTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="cdkTbBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="view">查看</a>
+</script>
+<script type="text/html" id="eDialogCdkDialog">
+    <table id="eDialogCdkTable" lay-filter="eDialogCdkTable" class="layui-hide"></table>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="cdkEditDialog">
+    <form id="cdkEditForm" lay-filter="cdkEditForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">Cdk类型：</label>
+            <div class="layui-input-block">
+                <input type="radio" lay-filter="type" name="typeId" value="1" title="单次使用" checked>
+                <input type="radio" lay-filter="type" name="typeId" value="2" title="无限使用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">Cdk数量:</label>
+            <div class="layui-input-block">
+                <input name="num" placeholder="请输入数量" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">物品ID</label>
+            <div class="layui-input-block">
+                <input name="item" id="item" value="" class="layui-hide"/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn" lay-filter="cdkEditSubmit" lay-submit>保存</button>
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        </div>
+    </form>
+</script>
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'zTree','jquery','tagsInput'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var tagsInput = layui.tagsInput;
+        /* 渲染表格 */
+        var insTb = table.render({
+            elem: '#cdkTable',
+            url: '/AdminAjax/CdkList',
+            page: true,
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn">添加Cdk</button>&nbsp;',
+                '<button lay-event="delAll" class="layui-btn layui-btn-sm layui-btn-danger icon-btn">删除选中</button>',
+                '</p>'].join(''),
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID', width: 50},
+                {field: 'code', title: 'cdk', align: 'center'},
+                {field: 'type', title: '类型',templet:function(d){
+                        if (d.type == 1){
+                            return '<span class="layui-badge layui-badge-green">单次</span>'
+                        } else{
+                            return '<span class="layui-badge layui-badge-green">无限</span>'
+                        }
+                    }},
+                {field: 'create_time', title: '创建时间', align: 'center', sort: true},
+                {field: 'status', title: '状态',templet:function(d){
+                        if (d.status == 1){
+                            return '<span class="text-danger">已被'+d.name+'使用</span>'
+                        } else{
+                            return '<span class="text-success">未使用</span>'
+                        }
+                    }},
+                {title: '操作', toolbar: '#cdkTbBar', align: 'center', width: 200, minWidth: 200}
+            ]]
+        });
+
+        form.on('submit(cdkTbSearch)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+            return false;
+        });
+        /* 表格工具条点击事件 */
+        table.on('tool(cdkTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') { // 删除
+                doDel([data.id]);
+            } else if (obj.event === 'view') {
+                showCdks(data.id);
+            }
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(cdkTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                cdkEditModel();
+            } else if (obj.event === 'delAll') { // 删除
+                var checkRows = table.checkStatus('cdkTable');
+                if (checkRows.data.length === 0) {
+                    layer.msg('请选择要删除的数据', {icon: 2});
+                    return;
+                }
+                var ids = checkRows.data.map(function (d) {
+                    return d.id;
+                });
+                doDelAll({ids: ids});
+            }
+        });
+
+        /* 显示表单弹窗 */
+        function cdkEditModel(mData) {
+            admin.open({
+                type: 1,
+                title: '添加Cdk',
+                content: $('#cdkEditDialog').html(),
+                success: function (layero, dIndex) {
+                    // 回显表单数据
+                    $('#item').tagsInput({skin: 'tagsinput-default'});
+                    form.val('cdkEditForm', mData);
+                    // 表单提交事件
+                    form.on('submit(cdkEditSubmit)', function (data) {
+                        var loadIndex = layer.load(2);
+                        $.post('/AdminAjax/AddCdkPost', data.field, function (res) {
+                            layer.close(loadIndex);
+                            if (200 === res.code) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {icon: 1});
+                                insTb.reload({page: {curr: 1}});
+                                window.open('/admin/showNewCdkey/' + res.key)
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }, 'json');
+                        return false;
+                    });
+                }
+            });
+        }
+
+        /* 删除 */
+        function doDel(ids) {
+            layer.confirm('确定删除该Cdk？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/DelCdk', {
+                    id: ids.join("."),
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        function doDelAll(obj) {
+            layer.confirm('确定删除选中Cdk？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/DelCdkAll', {
+                    ids: obj.ids ? obj.ids.join(',') : ''
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        function showCdks(id) {
+            admin.open({
+                type: 1,
+                area: '650px',
+                offset: '65px',
+                title: '物品ID列表',
+                content: $('#eDialogCdkDialog').html(),
+                success: function (layero) {
+                    // 渲染表格
+                    var insTbCom = table.render({
+                        elem: '#eDialogCdkTable',
+                        url: '/AdminAjax/CdkViewList?id=' + id,
+                        page: true,
+                        height: 400,
+                        cellMinWidth: 100,
+                        cols: [[
+                            {type: 'numbers', title: '#'},
+                            {field: 'item', sort: true, title: '物品列表'},
+                        ]],
+                        done: function () {
+                            $(layero).find('.layui-table-view').css('margin', '0');
+                        }
+                    });
+
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

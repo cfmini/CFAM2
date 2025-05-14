@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>{$configs.title} - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <script src="/static/js/color-modes.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+</head>
+<body>
+{include file="/common/header" /}
+<main>
+    <!--Pageheader start-->
+    <div class="pattern-square"></div>
+    <section class="pt-lg-7 pt-5" data-cue="fadeIn">
+        <div class="container">
+            <div class="row align-items-center justify-content-lg-start justify-content-center flex-lg-nowrap">
+                <div class="col-lg-5 col-12" data-cues="slideInDown" data-group="page-title" data-delay="700">
+                    <div class="text-center text-lg-start" data-cue="zoomIn">
+                        <div class="mb-5">
+                            <span class="badge align-items-center p-2 pe-3 ps-3 fs-6 text-primary border border-primary-subtle rounded-pill mb-4">Build: {$configs.ver}</span>
+                            <h1 class="mb-3 display-4">{$configs.petitle}</h1>
+                            <p class="lead mb-0">{$configs.pecontent}</p>
+                        </div>
+                        <div data-cues="slideInDown" data-group="page-title-buttons" data-delay="800">
+                            <a href="{$configs.durl1}" class="btn btn-primary me-2">{$configs.dtitle1}</a>
+                            <a href="{$configs.durl2}" class="btn btn-light">{$configs.dtitle2}</a>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-4 my-6" data-cues="slideInDown" data-group="page-title-buttons" data-delay="900">
+                            <div class="d-flex align-items-center">
+                              <span class="border p-2 align-items-center rounded bg-white text-primary d-inline-flex">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+                                    <path
+                                            d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+                                    <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+                                 </svg>
+                              </span>
+                                <span class="ms-2 fs-6">免费注册</span>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                              <span class="border p-2 align-items-center rounded bg-white text-primary d-inline-flex">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                                    <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                                    <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z" />
+                                 </svg>
+                              </span>
+                                <span class="ms-2 fs-6">免费充值</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-7 offset-xxl-1 col-lg-7 col-12 mt-5 mt-lg-0" data-cue="fadeIn" data-delay="1000">
+                    <div class="position-relative">
+                        <div class="bg-light-subtle p-md-4 p-2 rounded-4 border scene" data-relative-input="true">
+                            <div data-depth="0.09">
+                                <figure data-cues="zoomIn" data-delay="900">
+                                    <img src="{$configs.indeximg}" alt="landing" class="w-100 rounded-4 shadow border" />
+                                </figure>
+                            </div>
+                        </div>
+                        <div class="position-absolute top-50 mt-n10 start-0 ms-n4 d-none d-lg-block">
+                            <div class="badge text-bg-info text-white-stablepx-3 py-2 fs-6 rounded-pill">仿官</div>
+                            <div class="position-absolute top-0 end-0 mt-n3 me-n3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="M22.3722 2.21902C22.4794 2.32632 22.5515 2.46361 22.5791 2.61278C22.6067 2.76194 22.5884 2.91597 22.5267 3.05452L14.0412 22.1465C13.9819 22.28 13.8849 22.3933 13.7621 22.4725C13.6393 22.5517 13.4961 22.5933 13.35 22.5921C13.2039 22.591 13.0613 22.5473 12.9397 22.4662C12.8182 22.3852 12.7229 22.2704 12.6657 22.136L9.60416 14.987L2.45366 11.924C2.31974 11.8664 2.20552 11.771 2.12495 11.6496C2.04439 11.5281 2.00097 11.3857 2.00002 11.24C1.99906 11.0942 2.04061 10.9513 2.11958 10.8288C2.19854 10.7062 2.31151 10.6094 2.44466 10.55L21.5367 2.06452C21.675 2.00309 21.8287 1.98497 21.9776 2.01255C22.1265 2.04012 22.265 2.1121 22.3722 2.21902Z"
+                                            fill="#0DCAF0" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="position-absolute bottom-50 mb-n10 start-0 d-none d-lg-block">
+                            <div class="badge text-bg-success text-white-stablepx-3 py-2 fs-6 rounded-pill">权限</div>
+                            <div class="position-absolute top-0 end-0 mt-n3 me-n3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="M22.3722 2.21902C22.4794 2.32632 22.5515 2.46361 22.5791 2.61278C22.6067 2.76194 22.5884 2.91597 22.5267 3.05452L14.0412 22.1465C13.9819 22.28 13.8849 22.3933 13.7621 22.4725C13.6393 22.5517 13.4961 22.5932 13.35 22.5921C13.2039 22.591 13.0613 22.5473 12.9397 22.4662C12.8182 22.3852 12.7229 22.2704 12.6657 22.136L9.60416 14.987L2.45366 11.924C2.31974 11.8664 2.20552 11.771 2.12495 11.6496C2.04439 11.5281 2.00097 11.3857 2.00002 11.24C1.99906 11.0942 2.04061 10.9513 2.11958 10.8288C2.19854 10.7062 2.31151 10.6094 2.44466 10.55L21.5367 2.06452C21.675 2.00309 21.8287 1.98497 21.9776 2.01255C22.1265 2.04012 22.265 2.1121 22.3722 2.21902Z"
+                                            fill="#198754" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="position-absolute bottom-0 me-n8 end-0 d-none d-lg-block">
+                            <div class="badge text-bg-danger text-white-stablepx-3 py-2 fs-6 rounded-pill">耐玩</div>
+                            <div class="position-absolute top-0 start-0 mt-n3 ms-n3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="M2.21946 2.21902C2.11223 2.32632 2.04007 2.46361 2.01248 2.61278C1.9849 2.76194 2.0032 2.91597 2.06496 3.05452L10.5505 22.1465C10.6097 22.28 10.7067 22.3933 10.8295 22.4725C10.9523 22.5517 11.0956 22.5933 11.2416 22.5921C11.3877 22.591 11.5303 22.5473 11.6519 22.4662C11.7735 22.3852 11.8687 22.2704 11.926 22.136L14.9875 14.987L22.138 11.924C22.2719 11.8664 22.3861 11.771 22.4667 11.6496C22.5472 11.5281 22.5906 11.3857 22.5916 11.24C22.5926 11.0942 22.551 10.9513 22.472 10.8288C22.3931 10.7062 22.2801 10.6094 22.147 10.55L3.05496 2.06452C2.91659 2.00309 2.76287 1.98497 2.61402 2.01255C2.46516 2.04012 2.32664 2.1121 2.21946 2.21902Z"
+                                            fill="#DC3545" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="position-absolute top-0 mt-10 end-0 d-none d-lg-block">
+                            <div class="badge text-bg-primary text-white-stablepx-3 py-2 fs-6 rounded-pill">充值</div>
+                            <div class="position-absolute top-0 start-0 mt-n3 ms-n3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="M2.21946 2.21902C2.11223 2.32632 2.04007 2.46361 2.01248 2.61278C1.9849 2.76194 2.0032 2.91597 2.06496 3.05452L10.5505 22.1465C10.6097 22.28 10.7067 22.3933 10.8295 22.4725C10.9523 22.5517 11.0956 22.5933 11.2416 22.5921C11.3877 22.591 11.5303 22.5473 11.6519 22.4662C11.7735 22.3852 11.8687 22.2704 11.926 22.136L14.9875 14.987L22.138 11.924C22.2719 11.8664 22.3861 11.771 22.4667 11.6496C22.5472 11.5281 22.5906 11.3857 22.5916 11.24C22.5926 11.0942 22.551 10.9513 22.472 10.8288C22.3931 10.7062 22.2801 10.6094 22.147 10.55L3.05496 2.06452C2.91659 2.00309 2.76287 1.98497 2.61402 2.01255C2.46516 2.04012 2.32664 2.1121 2.21946 2.21902Z"
+                                            fill="#8B3DFF" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Pageheader end-->
+
+    <!--Trusted worldwide start-->
+    <div class="my-xl-7 py-5" data-cue="fadeIn">
+        <section class="mb-xl-9" data-cue="fadeIn">
+            <div class="container">
+                <div class="row row border-top border-bottom">
+                    <div class="col-md-4 border-end-md border-bottom border-bottom-md-0">
+                        <div class="text-center p-5 px-xl-8 px-md-0" data-cue="zoomIn">
+                            <h5>在线人数</h5>
+                            <p class="mb-0">999+</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 border-end-md border-bottom border-bottom-md-0">
+                        <div class="text-center p-5 px-xl-8 px-md-0" data-cue="zoomIn">
+
+                            <h5>运行时间</h5>
+                            <p class="mb-0">999天</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-5 px-xl-8 px-md-0" data-cue="zoomIn">
+                            <h5>注册用户</h5>
+                            <p class="mb-0">{$numMember}+</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <section class="my-xl-9 my-5" data-cue="fadeIn">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-5 pb-2">
+                        <h2 class="mb-2">排行榜</h2>
+                        <p class="mb-0">每天12点前更新缓存 - 非实时更新</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" data-cue="fadeIn">
+                    <ul class="nav nav-pills mb-7 nav-primary" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a
+                                    href="#"
+                                    class="nav-link active me-2"
+                                    id="pillsDayone-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pillsDayone"
+                                    role="tab"
+                                    aria-controls="pillsDayone"
+                                    aria-selected="true">
+                                等级排行
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#" class="nav-link me-2" id="pillsDaytwo-tab" data-bs-toggle="pill" data-bs-target="#pillsDaytwo" role="tab" aria-controls="pillsDaytwo" aria-selected="false">
+                                GP排行
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#" class="nav-link me-2" id="Invite-tab" data-bs-toggle="pill" data-bs-target="#Invite" role="tab" aria-controls="Invite" aria-selected="false">
+                                邀请排行
+                            </a>
+                        </li>
+<!--                        <li class="nav-item" role="presentation">-->
+<!--                            <a href="#" class="nav-link" id="pillsDaythree-tab" data-bs-toggle="pill" data-bs-target="#pillsDaythree" role="tab" aria-controls="pillsDaythree" aria-selected="false">-->
+<!--                                封号统计-->
+<!--                            </a>-->
+<!--                        </li>-->
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane show active" id="pillsDayone" role="tabpanel" aria-labelledby="pillsDayone-tab" tabindex="0" data-cues="slideInRight">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">昵称</th>
+                                    <th scope="col">等级</th>
+                                    <th scope="col">注册时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="UserLev" id="item"}
+                                <tr>
+                                    <th scope="row">{$i}</th>
+                                    <td>{$item.NICK}</td>
+                                    <td><img src="/static/images/dj/BigClass_{$item.LEV}.jpg" width="16" height="16" alt="rank"></td>
+                                    <td>{:date('Y-m-d H:i', strtotime($item.REG_DATE))}</td>
+                                </tr>
+                               {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="pillsDaytwo" role="tabpanel" aria-labelledby="pillsDaytwo-tab" tabindex="0" data-cues="slideInRight">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">昵称</th>
+                                    <th scope="col">GP</th>
+                                    <th scope="col">注册时间</th>
+                                </tr>
+                                </thead>
+                                {volist name="UserGP" id="item"}
+                                <tr>
+                                    <th scope="row">{$i}</th>
+                                    <td>{$item.NICK}</td>
+                                    <td>{$item.GAME_POINT}</td>
+                                    <td>{:date('Y-m-d H:i', strtotime($item.REG_DATE))}</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="Invite" role="tabpanel" aria-labelledby="Invite-tab" tabindex="0" data-cues="slideInRight">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">账号</th>
+                                    <th scope="col">邀请人数</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="userTop" id="item"}
+                                <tr>
+                                    <th scope="row">{$item.id}</th>
+                                    <td>{$item.userid}</td>
+                                    <td>{$item.Invite} 人</td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="my-xl-7 py-5">
+        <div class="container" data-cue="fadeIn">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="text-center mb-7 pb-2">
+                        <h2 class="mb-3">最新用户</h2>
+                        <p class="mb-0">本服累计用户{$numMember}+，下面为最新加入的用户</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-7 pb-2 text-center justify-content-center g-0">
+                <div class="col-lg-12 col-12">
+                    <div class="marquee" data-cue="slideInLeft">
+                        <div class="track">
+
+                            {volist name="logsA" id="item"}
+                            <a href="javascript:void(0)" class="btn btn-light rounded-pill me-1 mb-3 btn-logo btn-lift">
+                                <span><img src="https://q2.qlogo.cn/headimg_dl?dst_uin={$item.email}&spec=100" alt="logo" class="icon-xs" style="border-radius: 100%;"/></span>
+                                <span class="ms-1 d-none d-lg-inline-flex">{$item.userid}</span>
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-12 px-lg-7">
+                    <div class="marquee" data-cue="slideInRight">
+                        <div class="track-2">
+                            {volist name="logsB" id="item"}
+                            <a href="javascript:void(0)" class="btn btn-light rounded-pill me-1 mb-3 btn-logo btn-lift">
+                                <span><img src="https://q2.qlogo.cn/headimg_dl?dst_uin={$item.email}&spec=100" alt="logo" class="icon-xs" style="border-radius: 100%;"/></span>
+                                <span class="ms-1 d-none d-lg-inline-flex">{$item.userid}</span>
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-12">
+                    <div class="marquee" data-cue="slideInLeft">
+                        <div class="track">
+                            {volist name="logsC" id="item"}
+                            <a href="javascript:void(0)" class="btn btn-light rounded-pill me-1 mb-3 btn-logo btn-lift">
+                                <span><img src="https://q2.qlogo.cn/headimg_dl?dst_uin={$item.email}&spec=100" alt="logo" class="icon-xs" style="border-radius: 100%;"/></span>
+                                <span class="ms-1 d-none d-lg-inline-flex">{$item.userid}</span>
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+{include file="/common/footer" /}
+<!-- Scroll top -->
+<div class="btn-scroll-top">
+    <svg class="progress-square svg-content" width="100%" height="100%" viewBox="0 0 40 40">
+        <path d="M8 1H32C35.866 1 39 4.13401 39 8V32C39 35.866 35.866 39 32 39H8C4.13401 39 1 35.866 1 32V8C1 4.13401 4.13401 1 8 1Z" />
+    </svg>
+</div>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/scrollCue.min.js"></script>
+<script src="/static/js/scrollcue.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>网页商城 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <script src="/static/js/jquery.min.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+    <style>
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination > li {
+            display: inline;
+        }
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+        .pagination > li:first-child > a,
+        .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        .pagination > li:last-child > a,
+        .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        .pagination > li > a:hover,
+        .pagination > li > span:hover,
+        .pagination > li > a:focus,
+        .pagination > li > span:focus {
+            z-index: 2;
+            color: #23527c;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #8b3dff;
+            border-color: #8b3dff;
+        }
+        .pagination > .disabled > span,
+        .pagination > .disabled > span:hover,
+        .pagination > .disabled > span:focus,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+            color: #777;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+        .zoom-img img{
+            height: 230px;
+            width: 405px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navbar -->
+{include file="/common/header" /}
+
+<main>
+    <!--Square Pattern Start-->
+    <div class="pattern-square"></div>
+    <!--Square Pattern End-->
+
+    <!--Pageheader start-->
+    <section class="py-5 py-lg-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="text-center">
+                        <h1 class="mb-3">网页商城</h1>
+                        <p class="mb-0">这里有一些游戏里面买不到的东西🤷</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Pageheader end-->
+
+    <!--Blog grid start-->
+    <section class="mb-xl-9 my-4">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-5 col-md-7 col-12">
+                    <form action="/shop" method="get" class="form-inline my-2 my-lg-0">
+                    <div class="row g-2 g-sm-3 align-items-center">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <input type="text" name="keyword" value="" class="form-control mr-sm-2" placeholder="搜索商品...">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="col-lg-7 col-md-5 col-12 d-none d-lg-block">
+                    <div class="nav d-flex gap-1 justify-content-md-end mt-3 mt-md-0">
+                        <li>
+                            <a class="btn btn-light btn-md">
+                                共有{$count}件商品
+                            </a>
+                        </li>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row gy-lg-7 gy-5">
+                {volist name="list" id="v"}
+                <article class="col-lg-4 col-md-6 col-12">
+                    <figure class="mb-4 zoom-img">
+                        <a>
+                            <img src="{$v.img}" alt="blog" class="img-fluid rounded-3" />
+                        </a>
+                    </figure>
+                    <h3 class="my-3 lh-base h4">
+                        {$v.title}
+                    </h3>
+                    <div class="d-flex align-items-center justify-content-between mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-2">
+                                <button onclick="BuyAjax('{$v.id}')"  class="btn btn-primary btn-sm">立即购买</button>
+                            </div>
+                        </div>
+                        <div class="ms-3"><span class="fs-6"> <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill text-uppercase">{$v.money}{if $v.type == 1}CF点{else}GP点{/if}</span></span></div>
+                    </div>
+                </article>
+                {/volist}
+            </div>
+            {$list|raw}
+        </div>
+    </section>
+    <!--Blog grid end-->
+</main>
+{include file="/common/footer" /}
+<!-- Scroll top -->
+<div class="btn-scroll-top">
+    <svg class="progress-square svg-content" width="100%" height="100%" viewBox="0 0 40 40">
+        <path d="M8 1H32C35.866 1 39 4.13401 39 8V32C39 35.866 35.866 39 32 39H8C4.13401 39 1 35.866 1 32V8C1 4.13401 4.13401 1 8 1Z" />
+    </svg>
+</div>
+<!-- Libs JS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+
+<!-- Theme JS -->
+<script src="/static/js/theme.min.js"></script>
+
+<script src="/static/js/scrollCue.min.js"></script>
+<script src="/static/js/scrollcue.js"></script>
+<script src="/static/js/index.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+</body>
+</html>

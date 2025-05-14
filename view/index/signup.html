@@ -1,0 +1,155 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>账号注册 - {$configs.info}</title>
+    <meta name="keywords" content="{$configs.keywords}"/>
+    <meta name="description" content="{$configs.description}"/>
+    <meta name="author" content="会飞的鱼"/>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <script src="/static/js/jquery.min.js"></script>
+    <link href="/static/css/simplebar.min.css" rel="stylesheet" />
+    <link href="/static/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/scrollCue.css" />
+    <link rel="stylesheet" href="/static/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/static/css/theme.min.css" />
+    <link href="/static/css/sweetalert2.min.css" rel="stylesheet">
+    <style>
+      .text-right img {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+</head>
+
+<body>
+<main class="position-relative">
+  <div class="pattern-square"></div>
+  <!--Pageheader start-->
+  <section class="py-5 py-lg-8">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-4 offset-xl-4 col-md-12 col-12">
+          <div class="text-center">
+            <a href="index.html"><img src="/static/images/brand-icon.svg" alt="brand" class="mb-3" /></a>
+            <h1 class="mb-1">创建帐户</h1>
+            <p class="mb-0">立即创建你的免费账号</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Pageheader end-->
+  <!--Sign up start-->
+  <section>
+    <div class="container">
+      <div class="row justify-content-center mb-6">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-12">
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <form class="needs-validation mb-6" id="regPost" method="post" novalidate>
+                {if $configs['in'] ==1}
+                <div class="mb-3">
+                  <label for="Invitation" class="form-label">邀请码</label>
+                  <input type="text" class="form-control" name="Invitation" id="Invitation" required />
+                  <div class="invalid-feedback">再次输入密码</div>
+                </div>
+                {/if}
+                <div class="mb-3">
+                  <label for="username" class="form-label">账号</label>
+                  <input type="text" class="form-control" name="username" id="username" required />
+                  <div class="invalid-feedback">请输入游戏账号</div>
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">邮箱</label>
+                  <input type="text" class="form-control" name="email" id="email" required />
+                  <div class="invalid-feedback">请输入正常使用的邮箱</div>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">密码</label>
+                  <div class="password-field position-relative">
+                    <input type="password" class="form-control fakePassword" name="password" id="password" required />
+                    <span><i class="bi bi-eye-slash passwordToggler"></i></span>
+                    <div class="invalid-feedback">请输入密码</div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="password2" class="form-label">确认密码</label>
+                  <div class="password-field position-relative">
+                    <input type="password" class="form-control fakePassword" name="password2" id="password2" required />
+                    <span><i class="bi bi-eye-slash passwordToggler"></i></span>
+                    <div class="invalid-feedback">再次输入密码</div>
+                  </div>
+                </div>
+
+                {if $configs.InSwitch == 1}
+                <div class="mb-3">
+                  <label class="form-label">邀请人账号：</label>
+                  <input type="text" class="form-control" name="userId" id="userId" placeholder="没有就不用填写" />
+                </div>
+                {/if}
+                <div class="mb-3 row">
+                  <label for="RegCode" class="form-label">
+                    验证码
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-7">
+                    <input type="text" id="RegCode" name="RegCode" class="form-control" placeholder="验证码">
+                    <div class="invalid-feedback">请输入验证码</div>
+                  </div>
+                  <div class="col-5 text-right">
+                    <img src="{:url('RegCaptcha')}" class="pull-right login-captcha" id="regCaptcha" style="cursor: pointer;" onclick="loadimg();" title="点击刷新" alt="captcha">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="mb-4 d-flex align-items-center justify-content-between">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="signupCheckTextCheckbox" />
+                      <label class="form-check-label ms-2" for="signupCheckTextCheckbox">
+                        <a href="#">服务条款</a>
+                        &amp;
+                        <a href="#">隐私政策</a>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid">
+                  <button class="btn btn-primary" type="submit">注册</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <span>
+            已有账号?
+            <a href="signin.html" class="text-primary">点我登录</a>
+         </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="text-center">
+            <div class="small mb-3 mb-lg-0 text-body-tertiary">
+              Copyright ©
+              <span class="text-primary"><a href="#">CFer 1.0</a></span>
+              | Designed by
+              <span class="text-primary"><a href="https://houz.cn/">会飞的鱼</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/simplebar.min.js"></script>
+<script src="/static/js/headhesive.min.js"></script>
+<script src="/static/js/theme.min.js"></script>
+<script src="/static/js/sweetalert2.all.min.js"></script>
+<script src="/static/js/index.js"></script>
+</body>
+</html>

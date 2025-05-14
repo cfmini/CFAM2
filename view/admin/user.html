@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+</head>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 表格工具栏 -->
+            <form class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">账&emsp;号:</label>
+                        <div class="layui-input-inline">
+                            <input name="username" class="layui-input" placeholder="输入账号"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">&emsp;
+                        <button class="layui-btn icon-btn" lay-filter="userTbSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- 数据表格 -->
+            <table id="userTable" lay-filter="userTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="userTbBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs {{d.nick==1?'layui-btn-disabled':''}}" {{d.nick==1?'lay-tips="该账号还没有创建角色！"':''}} lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" data-dropdown="#userTbDrop{{d.LAY_INDEX}}" no-shade="true">
+        更多<i class="layui-icon layui-icon-drop" style="font-size: 12px;margin-right: 0;"></i></a>
+    <ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="userTbDrop{{d.LAY_INDEX}}">
+        <div class="dropdown-anchor"></div>
+        <li {{d.nick==1?'class="disabled"':''}}><a lay-event="pay"><i class="layui-icon layui-icon-diamond"></i>账号充值</a></li>
+        <li><a lay-event="send"><i class="layui-icon layui-icon-add-circle"></i>物品发送</a></li>
+        <li><a lay-event="view"><i class="layui-icon layui-icon-user"></i>详细资料</a></li>
+        <li><a lay-event="reset"><i class="layui-icon layui-icon-password"></i>重置密码</a></li>
+    </ul>
+</script>
+<!-- 表格状态列 -->
+<script type="text/html" id="userTbState">
+    <input type="checkbox" lay-filter="userTbStateCk" value="{{d.usn}}" lay-skin="switch"
+           lay-text="正常|封号" {{d.HOLD_TYPE==1?'checked':''}}
+           {{d.HOLD_TYPE==2?'disabled':''}} style="display: none;"/>
+    <p style="display: none;">{{d.HOLD_TYPE==1?'正常':'封号'}}</p>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="userEditDialog">
+    <form id="userEditForm" lay-filter="userEditForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">角色名:</label>
+            <div class="layui-input-block">
+                <input name="nick" placeholder="请输入角色名" class="layui-input"
+                       lay-verType="tips" lay-verify="required" value="{{d.data.nick}}" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">等级:</label>
+            <div class="layui-input-block">
+                <input name="lev" placeholder="等级" class="layui-input"
+                       lay-verType="tips" lay-verify="required" value="{{d.data.lev}}" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">经验:</label>
+            <div class="layui-input-block">
+                <input name="exp" placeholder="经验值" class="layui-input"
+                       lay-verType="tips" lay-verify="required" value="{{d.data.exp}}" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">状态:</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="A" title="正常" {{d.data.type=='A'?'checked':''}}/>
+                <input type="radio" name="type" value="E" title="封号" {{d.data.type=='E'?'checked':''}}/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">GP点:</label>
+            <div class="layui-input-block">
+                <input name="gp" placeholder="请输入GP点" class="layui-input"
+                       lay-verType="tips" lay-verify="required" value="{{d.data.gp}}" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">GF点:</label>
+            <div class="layui-input-block">
+                <input name="cf" placeholder="请输入cf点" class="layui-input"
+                       lay-verType="tips" lay-verify="required" value="{{d.data.cf}}" required/>
+            </div>
+        </div>
+        <input type="text" name="usn" value="{{d.data.usn}}" hidden/>
+        <input type="text" name="cfs" value="{{d.data.cf}}" hidden/>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn" lay-filter="userEditSubmit" lay-submit>保存</button>
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="userAdd">
+    <form id="userAddForm" lay-filter="userAddForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">账号:</label>
+            <div class="layui-input-block">
+                <input name="username" placeholder="请输入账号" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">邮箱:</label>
+            <div class="layui-input-block">
+                <input name="email" placeholder="请输入邮箱" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">密码:</label>
+            <div class="layui-input-block">
+                <input name="password" placeholder="请输入密码" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn" lay-filter="userAddSubmit" lay-submit>添加</button>
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        </div>
+    </form>
+</script>
+<!-- 查看详情弹窗 -->
+<script type="text/html" id="eDialogInfoDialog">
+    <div class="paper-info-group">
+        <blockquote class="layui-elem-quote">啥都没写</blockquote>
+    </div>
+</script>
+<!-- 发送物品弹窗 -->
+<script type="text/html" id="eDialogSendDialog">
+    <div class="layui-card-body">
+        <form class="layui-form toolbar table-tool-mini">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label w-auto">搜索:</label>
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                </div>
+            </div>
+            <div class="layui-inline" style="padding-right: 110px;">
+                <button class="layui-btn icon-btn" lay-filter="SendTbSearch" lay-submit>
+                    <i class="layui-icon">&#xe615;</i>搜索
+                </button>
+            </div>
+        </div>
+        </form>
+        <table id="eDialogSendTable" lay-filter="eDialogSendTable" class="layui-hide"></table>
+    </div>
+</script>
+<!-- 发送物品表格操作列 -->
+<script type="text/html" id="eDialogSendtTbBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="sendItem">发送</a>
+</script>
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','laytpl','dropdown'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+        var admin = layui.admin;
+        var xmSelect = layui.xmSelect;
+        /* 渲染表格 */
+        var insTb = table.render({
+            elem: '#userTable',
+            url: '/AdminAjax/UserList',
+            page: true,
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 10,
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                '</p>'].join(''),
+            cellMinWidth: 100,
+            cols: [[
+                {field: 'usn', title: 'USN',width: 80},
+                {field: 'nick', title: '角色名'},
+                // {field: 'nick', title: '角色名', align:"center",templet:function(d){
+                //         if (d.nick == 777){
+                //             return '<span class="text-danger">无角色</span>';
+                //         } else {
+                //             return d.nick;
+                //         }
+                //     }},
+                {field: 'account', title: '账号', sort: true},
+                {field: 'HOLD_TYPE', title: '状态', templet: '#userTbState', sort: true},
+                {title: '操作', toolbar: '#userTbBar', align: 'center', width: 200}
+            ]]
+
+        });
+
+        /* 表格搜索 */
+        form.on('submit(userTbSearch)', function (data) {
+            insTb.reload({where: data.field, page: {curr: 1}});
+            return false;
+        });
+
+
+
+        /* 表格工具条点击事件 */
+        table.on('tool(userTable)', function (obj) {
+            var data = obj.data;
+            var thisTr = obj.tr;
+            var editBtn = $(thisTr).find('.layui-btn-primary.layui-btn-xs[lay-event="edit"]');
+            if (obj.event === 'edit') { // 修改
+                if (editBtn.hasClass('layui-btn-disabled')) {
+                    //layer.msg('该账号还没有创建角色', {icon: 2});
+                    return false;
+                } else {
+                    showEditModel([data.usn]);
+                }
+            } else if (obj.event === 'del') { // 删除
+                doDel([data.usn]);
+            } else if (obj.event === 'view') { // 详细资料
+                showInfo([data.usn]);
+            } else if (obj.event === 'reset') { // 重置密码
+                resetPsw([data.usn]);
+            } else if (obj.event === 'pay') { // 充值
+                payUser(data.usn);
+            } else if (obj.event === 'send') { // 物品发送
+                sendItem(data.usn);
+            }
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(userTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                AddUser();
+            }
+        });
+
+        function AddUser(mData) {
+            admin.open({
+                type: 1,
+                title: '添加用户',
+                content: $('#userAdd').html(),
+                success: function (layero, dIndex) {
+                    form.val('userAddForm', mData);
+                    form.on('submit(userAddSubmit)', function (data) {
+                        var loadIndex = layer.load(2);
+                        $.post('/AdminAjax/AddUser', data.field, function (res) {
+                            layer.close(loadIndex);
+                            if (res.code === 200) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {icon: 1});
+                                insTb.reload({page: {curr: 1}});
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        }, 'json');
+                        return false;
+                    });
+                    // 禁止弹窗出现滚动条
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                }
+            });
+        }
+
+        function sendItem(id) {
+            admin.open({
+                type: 1,
+                area: '650px',
+                offset: '65px',
+                title: '发送物品',
+                content: $('#eDialogSendDialog').html(),
+                success: function (layero) {
+                    form.on('submit(SendTbSearch)', function (data) {
+
+                        insTbCom.reload({where: data.field, page: {curr: 1}});
+                        return false;
+                    });
+                    // 渲染表格
+                    var insTbCom = table.render({
+                        elem: '#eDialogSendTable',
+                        url: '/AdminAjax/ItemList',
+                        page: true,
+                        height: 400,
+                        cellMinWidth: 100,
+                        cols: [[
+                            {field: 'ITEM_ID', title: 'ID'},
+                            {field: 'ITEM_CODE', sort: true, title: '标识', width: 100},
+                            {field: 'NAME', sort: true, title: '名称'},
+                            {field: 'ITEM_TYPE', sort: true, title: '分类'},
+                            {align: 'center', toolbar: '#eDialogSendtTbBar', title: '操作', minWidth: 80, width: 80}
+                        ]],
+                        done: function () {
+                            $(layero).find('.layui-table-view').css('margin', '0');
+                        }
+                    });
+                    table.on('tool(eDialogSendTable)', function (obj) {
+                        var data = obj.data;
+                        var layEvent = obj.event;
+                        if (layEvent === 'sendItem') {
+                            var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                            $.post('/AdminAjax/SendUserItem', { usn: id,itemId:data.ITEM_ID}, function (res) {
+                                if (res.code === 200) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    table.reload('eDialogSendTable');
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                                layer.close(load_show);
+                            }, 'json');
+                        }
+                    });
+                }
+            });
+        }
+
+
+        /* 显示表单弹窗 */
+        function showEditModel(mData) {
+            var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+            $.post('/AdminAjax/showEditModel', {
+                id: mData.join("."),
+            }, function (res) {
+                if (res.code === 200) {
+                    laytpl(userEditDialog.innerHTML).render(res, function (html) {
+                        admin.open({
+                            type: 1,
+                            title: '修改用户',
+                            content: html,
+                            success: function (layero, dIndex) {
+                                // 回显表单数据
+                                form.val('userEditForm', mData);
+                                // 表单提交事件
+                                form.on('submit(userEditSubmit)', function (data) {
+                                    //data.field.roleIds = insRoleSel.getValue('valueStr');
+                                    var loadIndex = layer.load(2);
+                                    $.post('/AdminAjax/EditUser', data.field, function (res) {
+                                        layer.close(loadIndex);
+                                        if (res.code === 200) {
+                                            layer.close(dIndex);
+                                            layer.msg(res.msg, {icon: 1});
+                                            insTb.reload({page: {curr: 1}});
+                                        } else {
+                                            layer.msg(res.msg, {icon: 2});
+                                        }
+                                    }, 'json');
+                                    return false;
+                                });
+                                // 回显选中角色
+                                if (mData && mData.roles) {
+                                    insRoleSel.setValue(mData.roles.map(function (item) {
+                                        return item.roleId;
+                                    }));
+                                }
+                                // 禁止弹窗出现滚动条
+                                $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                            }
+                        });
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+                layer.close(load_show);
+            }, 'json');
+
+        }
+
+        /* 删除 */
+        function doDel(ids) {
+            layer.confirm('删除后无法恢复，确认删除该账号？', {
+                skin: 'layui-layer-admin',
+                shade: .1
+            }, function (i) {
+                layer.close(i);
+                var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+                $.post('/AdminAjax/DelUser', {
+                    id: ids.join("."),
+                }, function (res) {
+                    layer.close(load_show);
+                    if (res.code === 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload({page: {curr: 1}});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        /* 修改用户状态 */
+        form.on('switch(userTbStateCk)', function (obj) {
+            var loadIndex = layer.load(2);
+            $.post('/AdminAjax/banned', {
+                userId: obj.elem.value,
+                state: obj.elem.checked ? 'A' : 'E'
+            }, function (res) {
+                layer.close(loadIndex);
+                if (res.code === 200) {
+                    layer.msg(res.msg, {icon: 1});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            }, 'json');
+        });
+
+        /*详细资料*/
+        function showInfo(ids) {
+            var load_show = layer.msg('正在处理中，请稍后...', {icon: 16, shade: 0.1, time: 0});
+            $.post('/AdminAjax/UserInfo', {
+                id: ids.join("."),
+            }, function (res) {
+                if (res.code === 200) {
+                    laytpl(eDialogInfoDialog.innerHTML).render(res, function (html) {
+                        admin.open({
+                            type: 1,
+                            title: '查看详情',
+                            area: '550px',
+                            content: html,
+                            success: function () {
+                                layer.photos({
+                                    photos: '#eDialogInfoImgs',
+                                    shade: .1,
+                                    closeBtn: true
+                                });
+                            }
+                        });
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+                layer.close(load_show);
+            }, 'json');
+        }
+        /* 重置密码 */
+        function resetPsw(obj) {
+            parent.layui.admin.open({
+                id: 'layer-psw',
+                title: '重置用户密码',
+                shade: .1,
+                area: '360px',
+                url: '/admin/retpass?id=' + obj,
+            });
+        }
+
+        function payUser(usn) {
+            parent.layui.admin.prompt({
+                title: '请输入充值金额：',
+                //formType: 1
+            }, function (value, index, elem) {
+                if (value.trim() === '') { // 检查输入值是否为空（包括空格）
+                    layer.msg('请输入金额', { icon: 2 });
+                    return; // 如果为空，则直接返回，不执行后续操作
+                }
+                if (value) {
+                    if (/^\d{1,7}$/.test(value)) {
+                        $.post('/AdminAjax/payUser', { value: value, usn: usn }, function (res) {
+                            if (res.code === 200) {
+                                layer.msg(res.msg, { icon: 1 });
+                                table.reload('userTable');
+                                parent.layer.close(index);
+                            } else {
+                                layer.msg(res.msg, { icon: 2 });
+                            }
+                        }, 'json');
+                    } else {
+                        layer.msg('请输入正确的数字且长度不超过7位', { icon: 2 });
+                        parent.layer.close(index);
+                    }
+                } else {
+                    parent.layer.close(index);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

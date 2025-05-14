@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>在线更新</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+</head>
+<style>
+    .layuiadmin-badge {
+        top: 50%;
+        margin-top: -9px;
+        color: #01aaed;
+    }
+    .layuiadmin-badge{
+        position: absolute;
+        right: 15px;
+    }
+</style>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <span id="ps"></span>
+                <span><b id="ver"></b></span>
+                <span class="layui-badge layuiadmin-badge" style="background-color:transparent">
+                    <a href="javascript:;" onclick="update_ver()" class="layui-btn layui-btn-xs layui-btn-normal">在线更新</a>
+                </span>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list" id="content">
+
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">历史版本</div>
+            <div class="layui-card-body" style="padding:0">
+                <table id="upManagement" lay-filter="upManagement"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['layer', 'jquery','table','form'], function () {
+        var form = layui.form,
+            $ = layui.jquery,
+            table = layui.table;
+        var ver = {$ver};
+        var pid = {$pid};
+        var hostname = window.location.hostname;
+        var port = window.location.port;
+        var urlWithPort;
+        var isIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        urlWithPort = hostname + (port ? ':' + port : '');
+        var insTb = table.render({
+            elem: '#upManagement',
+            url: 'https://api.houz.cn/ajax/UpdateLog',
+            page: true,
+            cellMinWidth: 100,
+            where: {
+                domain: urlWithPort,
+                pid: pid
+            },
+            cols: [[
+                {field: 'ver', title: '版本号', width:100},
+                {field: 'title', title: '更新简介'}
+            ]]
+        });
+        window.openlog = function(id){
+            var index = layer.load(3);
+            $.post("https://api.houz.cn/ajax/content", {
+                id: id,
+                domain: urlWithPort,
+                pid: pid
+            }, function (data) {
+                layer.close(index);
+                if (data.code === 200) {
+                    layui.admin.open({
+                        title: data.data.title,
+                        content: data.data.content
+                    });
+                } else {
+                    layer.alert(data.msg ? data.msg : '查看失败！');
+                }
+            });
+        }
+
+        // 页面加载完成后自动执行
+        $(document).ready(function(){
+            checkUpdate();
+        });
+
+        window.update_ver = function () {
+            layer.confirm('是否更新最新版本？</br>更新前请务必备份网站数据。', {
+                icon: 3,
+                title: '更新提示'
+            }, function () {
+                layer.closeAll('dialog');
+                var index = layer.load(3);
+                $.post("/AdminAjax/update", function (data) {
+                    layer.close(index);
+                    if (data.code === 200) {
+                        layer.open({
+                            icon: 6,
+                            content: '更新成功！请刷新浏览器。',
+                            title: '更新成功',
+                            btn: ['确认'],
+                            yes: function (index, layero) {
+                                location.reload();
+                            },
+                            cancel: function () {
+                                location.reload();
+                            }
+                        });
+                    }else{
+                        layer.open({
+                            icon: 5,
+                            content: data.msg?data.msg:'更新失败！请刷新页面后重试...',
+                            title: '更新失败',
+                            btn: ['确认'],
+                            yes: function (index, layero) {
+                                location.reload();
+                            },
+                            cancel: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+        }
+
+
+        function checkUpdate() {
+            $.ajax({
+                url: '/AdminAjax/Auth',
+                type: 'POST',
+
+                dataType: 'json', // 期望服务器返回JSON格式的数据
+                success: function(data, textStatus, jqXHR) {
+                    switch (data.code) {
+                        case 200: // 成功状态
+                            if (data.code === 200 && data.data.ver !== ver) {
+                                layer.msg('发现有新版本：' + data.data.ver + '，请进行更新！', {icon: 7});
+                                $('#ps').css('color', 'red').text('[可更新]');
+                                $('#ver').text(' 更新日期：' +data.data.create_time + '- 最新版本：'+data.data.ver);
+                                $('#content').html(data.data.content);
+                            }
+                            break;
+                        case 500: // 域名无授权
+                            layer.msg('域名无授权，无法进行更新检查！');
+                            break;
+                        case 501: // 没有查询到信息
+                            layer.msg('没有查询到更新信息！');
+                            break;
+                        case 201: // 当前为最新版本（注意：这通常与200重复，除非有特殊含义）
+                            $('#ps').text('[无需更新]');
+                            $('#ver').text(' 当前版本：'+ver);
+                            $('#content').html(data.msg);
+                            layer.msg('当前已是最新版本！', {icon: 6});
+                            break;
+                        default:
+                            layer.msg('未知错误：' + data.message || '未提供错误信息', {icon: 2});
+                            break;
+                    }
+                    // ... 其他基于返回数据的处理
+                },
+                error: function(data, textStatus, errorThrown) {
+                    // 处理请求失败的情况
+                    layer.msg('检查更新失败: ' + textStatus, {icon: 2});
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

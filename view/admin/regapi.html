@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>注册API</title>
+    <link rel="stylesheet" href="/static/admin/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/admin/assets/module/admin.css?v=318"/>
+    <script src="/static/js/clipboard.min.js"></script>
+    <style>
+        .url {
+            word-break: break-all;
+            cursor: pointer;
+            margin-left: 5px;
+            color: #777;
+            border: none;
+            border-radius: 0;
+            border-bottom: 2px solid #5FB878;
+        }
+        .simpleTable {
+            line-height: 20px;
+            padding-bottom: 16px;
+        }
+        .linep {
+            font-size: 14px;
+            font-weight: 700;
+            color: #555;
+            padding-left: 14px;
+            height: 16px;
+            line-height: 16px;
+            margin-bottom: 18px;
+            position: relative;
+            margin-top: 15px;
+        }
+        .linep:before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: #00aeff;
+            border-radius: 2px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px
+        }
+        ::-webkit-scrollbar-track-piece {
+            background-color: #ebebeb;
+            -webkit-border-radius: 4px
+        }
+        ::-webkit-scrollbar-thumb:vertical {
+            height: 32px;
+            background-color: #ccc;
+            -webkit-border-radius: 4px
+        }
+        ::-webkit-scrollbar-thumb:horizontal {
+            width: 32px;
+            background-color: #ccc;
+            -webkit-border-radius: 4px
+        }
+        .layuiadmin-badge-switchForm {
+            top: 25%;
+            margin-top: -9px;
+            color: #01aaed;
+        }
+        .layuiadmin-badge-switchForm{
+            position: absolute;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">注册API接口
+                    <div class="layui-badge layuiadmin-badge-switchForm" style="background-color:transparent">
+                        <div class="layui-form" lay-filter="switchForm">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="switchReg" lay-skin="switch" lay-filter="switchRegFilter" lay-text="开启接口|关闭接口" {if $configs.regapi == 1}checked{/if}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+
+                    <div class="layui-form layui-form-pane">
+                        <blockquote class="layui-elem-quote">通过API注册账号密码</blockquote>
+                        <p class="simpleTable">
+                            <span class="layui-badge layui-bg-green">返回格式：</span>
+                            <span style="margin-left: 5px;">JSON</span>
+                        </p>
+                        <p class="simpleTable">
+                            <span class="layui-badge">请求方式：</span>
+                            <span style="margin-left: 5px;">GET/POST</span>
+                        </p>
+                        <p class="simpleTable">
+                            <span class="layui-badge layui-bg-black">接口地址：</span>
+                            <span class="url" data-clipboard-text="{$domain}/index/AjaxReg">{$domain}/index/AjaxReg</span>
+                        </p>
+                        <p class="simpleTable">
+                            <span class="layui-badge layui-bg-orange">用户密钥：</span>
+                            <span class="url" data-clipboard-text="{$user.token}">{$user.token}</span>
+                        </p>
+                        <p class="linep">请求参数说明：</p>
+                        <table class="layui-table" lay-size="sm">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>必填</th>
+                                <th>说明</th>
+                                <th>示例</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>uid</td>
+                                <td>是</td>
+                                <td>用户UID</td>
+                                <td>uid=用户UID</td>
+                            </tr>
+                            <tr>
+                                <td>token</td>
+                                <td>是</td>
+                                <td>用户token</td>
+                                <td>token=用户token</td>
+                            </tr>
+                            <tr>
+                                <td>user</td>
+                                <td>是</td>
+                                <td>注册账号</td>
+                                <td>user=需注册的账号</td>
+                            </tr>
+                            <tr>
+                                <td>pass</td>
+                                <td>是</td>
+                                <td>注册密码</td>
+                                <td>pass=注册密码</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p class="linep">响应结果说明：</p>
+                        <table class="layui-table" lay-size="sm">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>类型</th>
+                                <th>必填</th>
+                                <th>说明</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>code</td>
+                                <td>number</td>
+                                <td>是</td>
+                                <td>状态码：200成功 / 500失败</td>
+                            </tr>
+                            <tr>
+                                <td>msg</td>
+                                <td>String</td>
+                                <td>是</td>
+                                <td>状态对应描述</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p class="linep">请求示例：</p>
+                        <blockquote class="layui-elem-quote"><a href="{$domain}/index/AjaxReg?uid=1&token={$user.token}&user=test111&pass=123456" target="_blank" class="url">{$domain}/index/AjaxReg?uid=1&token={$user.token}&user=test111&pass=123456</a></blockquote>
+                        <p class="linep">返回示例：</p>
+                        <pre class="layui-code">{
+    "code": 200,
+    "msg": "注册成功",
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- js部分 -->
+<script type="text/javascript" src="/static/admin/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/static/admin/assets/js/common.js?v=318"></script>
+<script>
+    layui.use(['form', 'jquery'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        form.on('switch(switchRegFilter)', function(data){
+            var status = data.elem.checked ? '开启' : '关闭';
+            $.ajax({
+                url: '/AdminAjax/getRegStatus',
+                type: 'POST',
+                data: {
+                    id:'regapi',
+                    status: data.elem.checked ? 1 : 0
+                },
+                dataType: 'json',
+                success: function(res){
+                    layer.msg(res.msg, {icon: 1});
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    layer.msg(res.msg, {icon: 2});
+                }
+            });
+        });
+    });
+</script>
+<script>
+    var clipboard = new ClipboardJS('.url');
+    clipboard.on('success', function(e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        layer.msg("复制成功，请粘贴使用！", {
+            icon: 1
+        });
+        e.clearSelection();
+    });
+    clipboard.on('error', function(e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        layer.msg("复制失败，请手动复制！", {
+            icon: 2
+        });
+    });
+</script>
+</body>
+</html>

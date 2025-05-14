@@ -1,0 +1,51 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light w-100">
+        <div class="container px-3">
+<!--            <a class="navbar-brand" href="./index.html"><img src="./assets/images/logo.svg" alt /></a>-->
+            <a class="navbar-brand" href="/">CFam</a>
+            <button class="navbar-toggler offcanvas-nav-btn" type="button">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="offcanvas offcanvas-start offcanvas-nav" style="width: 20rem">
+                <div class="offcanvas-header">
+                    <a href="/" class="text-inverse">CFer</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body pt-0 align-items-center">
+                    <ul class="navbar-nav mx-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">首页</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/shop">网页商城</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/events">活动中心</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/news">站内公告</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/report">投诉举报</a>
+                        </li>
+                    </ul>
+                    <div class="mt-3 mt-lg-0 d-flex align-items-center">
+                        {if session('USER_LOGIN_ID')}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="https://api.picurl.cn/redir/adbc5d66820e3041c37c68a04f0e66fc.jpg" alt="Avatar" class="avatar avatar-xs rounded-circle"> {$userUid}</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/user">会员中心</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">退出</a></li>
+                            </ul>
+                        </div>
+                        {else}
+                        <a href="/signin" class="btn btn-light mx-2">登录</a>
+                        <a href="/signup" class="btn btn-primary">注册</a>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

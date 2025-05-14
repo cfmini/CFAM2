@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="代理后台">
+    <meta name="description" content="代理后台">
+    <meta name="author" content="会飞的鱼">
+    <title>订单管理</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/js/jquery-confirm/jquery-confirm.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/agency/css/style.min.css">
+</head>
+
+<body>
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        {include file="agency/side" /}
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+            {include file="agency/navbar" /}
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid p-t-15">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-shadowed">
+                            <div class="card-body">
+                                <table id="tb_departments"></table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/agency/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/popper.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/static/agency/js/main.min.js"></script>
+<script type="text/javascript">
+    $('#tb_departments').bootstrapTable({
+        classes: 'table table-bordered table-hover table-striped',
+        url: '/Agency/get_list_order',
+        method: 'post',
+        //dataType : 'jsonp',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+        uniqueId: 'id',
+        idField: 'id',             // 每行的唯一标识字段
+        toolbar: '#toolbar',       // 工具按钮容器
+        //clickToSelect: true,     // 是否启用点击选中行
+        showColumns: true,         // 是否显示所有的列
+        showRefresh: true,         // 是否显示刷新按钮
+
+        showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+
+        pagination: true,                    // 是否显示分页
+        sortOrder: "asc",                    // 排序方式
+        queryParams: function(params) {
+            var temp = {
+                limit: params.limit,         // 每页数据量
+                offset: params.offset,       // sql语句起始索引
+                page: (params.offset / params.limit) + 1,
+                sort: params.sort,           // 排序的列名
+                sortOrder: params.order      // 排序方式'asc' 'desc'
+            };
+            return temp;
+        },                                   // 传递参数
+        sidePagination: "client",            // 分页方式：client客户端分页，server服务端分页
+        pageNumber: 1,                       // 初始化加载第一页，默认第一页
+        pageSize: 10,                        // 每页的记录行数
+        pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+        //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+
+        //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+        //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            sortable: true    // 是否排序
+        }, {
+            field: 'out_trade_no',
+            title: '商户订单号'
+        }, {
+            field: 'trade_no',
+            title: '系统订单号'
+        }, {
+            field: 'money',
+            title: '订单金额'
+        }, {
+            field: 'type',
+            title: '支付方式'
+        }, {
+            field: 'create_time',
+            title: '创建时间'
+        }, {
+            field: 'update_time',
+            title: '完成时间'
+        },
+            {
+                field: 'status',
+                title: '支付状态',
+                formatter:function(value, row, index){
+                    var value="";
+                    if (row.trade_status == '0') {
+                        value = '<span class="badge badge-warning">未支付</span>';
+                    } else if(row.trade_status == 'TRADE_SUCCESS') {
+                        value = '<span class="badge badge-success">已支付</span>';
+                    }else {
+                        value = row.pType ;
+                    }
+                    return value;
+                }
+            }],
+        onLoadSuccess: function(data){
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    });
+</script>
+</body>
+</html>
